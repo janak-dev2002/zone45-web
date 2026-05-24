@@ -1,0 +1,39 @@
+﻿# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Build artifacts
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+vendor/
+target/
+out/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project-specific
+backups/
+devops/nginx/ssl/
+tests/screenshots/
+*.log
+
+# MCP config - contains database credentials, never commit
+.mcp.json
+.gemini/settings.json
+
+# Git worktrees â€” nested inside project root, must not be tracked
+worktrees/
