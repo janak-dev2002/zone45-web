@@ -1,5 +1,5 @@
 # ZoneForty5 — Tasks
-> Last updated: 2026-05-27
+> Last updated: 2026-05-28
 
 ## Sprint Goal
 Deliver the fully functional ZoneForty5 agency website MVP, complete with public SSG pages, secure admin panel, and robust deployment pipeline, by June 1, 2026.
@@ -22,13 +22,13 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [ ] Setup `vite-react-ssg` pre-rendering logic.
 - [ ] Integrate API with frontend (blocked by: backend api-contracts.md)
 
-## [DEVOPS] — Pending
-- [ ] Configure Cloudflare (DNS, Email Routing, Turnstile).
-- [ ] Provision AWS S3 (backups) and Cloudflare R2 (uploads).
-- [ ] Write Nginx config and multi-stage `nginx.Dockerfile`.
-- [ ] Setup root `docker-compose.yml`.
-- [ ] Build CI/CD pipelines (GitHub Actions).
-- [ ] Provision EC2 `t3.small` and run initial deploy (blocked by: functional codebase)
+## [DEVOPS] — Completed
+- [x] Configure Cloudflare (DNS, Email Routing, Turnstile). (documented in devops/cloudflare/README.md — manual steps for founder)
+- [x] Provision AWS S3 (backups) and Cloudflare R2 (uploads). (documented in devops/aws/README.md — manual steps for founder)
+- [x] Write Nginx config and multi-stage `nginx.Dockerfile`. (devops/nginx.Dockerfile, devops/nginx/nginx.conf, devops/nginx/conf.d/default.conf)
+- [x] Setup root `docker-compose.yml`. (devops/docker-compose.yml + devops/docker-compose.dev.yml)
+- [x] Build CI/CD pipelines (GitHub Actions). (.github/workflows/ci.yml + deploy.yml)
+- [ ] Provision EC2 `t3.small` and run initial deploy (blocked by: functional codebase — Backend + Frontend agents must deliver first)
 
 ## [QA] — Pending
 - [ ] Write E2E Playwright smoke tests (blocked by: deployed application)
@@ -40,3 +40,4 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 
 ## COMPLETED
 - [x] Produce system architecture (owner: ARCHITECTURE)
+- [x] All DevOps infrastructure files (owner: DEVOPS) — PR #2 open, awaiting merge
