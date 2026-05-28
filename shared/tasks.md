@@ -23,12 +23,15 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] Unit tests (51 passing, 8 suites).
 - [x] Handoff written: `shared/agent-handoffs/backend-done.md`
 
-## [FRONTEND] — Pending
-- [ ] Scaffold project: React 18, Vite, TS, Tailwind, React Router.
-- [ ] Build public static UI components (Dark mode aesthetics).
-- [ ] Build Admin panel auth flows and CRUD UI.
-- [ ] Setup `vite-react-ssg` pre-rendering logic.
-- [ ] Integrate API with frontend (blocked by: backend api-contracts.md)
+## [FRONTEND] — Completed
+- [x] Scaffold project: React 18, Vite, TS, Tailwind, React Router.
+- [x] Build public static UI components (Dark mode aesthetics — matched design handoff exactly).
+- [x] Build Admin panel auth flows and CRUD UI.
+- [x] Setup `vite-react-ssg` pre-rendering logic (5 public routes pre-rendered at build time).
+- [x] Integrate API with frontend (all 23 endpoints wired via typed service layer).
+- [x] react-helmet-async meta tags on all public pages.
+- [x] sitemap.xml generated at build time, robots.txt static.
+- [x] Handoff written: `shared/agent-handoffs/frontend-done.md`
 
 ## [DEVOPS] — Completed
 - [x] Configure Cloudflare (DNS, Email Routing, Turnstile). (documented in devops/cloudflare/README.md — manual steps for founder)
