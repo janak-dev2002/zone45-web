@@ -1,0 +1,162 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Backend: TypeScript compile + lint + unit tests ────────────────────────
+  backend:
+    name: Backend — tsc + lint + tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript compile check
+        run: npx tsc --noEmit
+
+      - name: ESLint
+        run: npx eslint src --ext .ts --max-warnings 0
+
+      - name: Unit tests
+        run: npm test -- --coverage --passWithNoTests
+
+  # ── Frontend: TypeScript compile + lint + build ────────────────────────────
+  frontend:
+    name: Frontend — tsc + lint + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript compile check
+        run: npx tsc --noEmit
+
+      - name: ESLint
+        run: npx eslint src --ext .ts,.tsx --max-warnings 0
+
+      - name: Build (SSG)
+        run: npm run build
+        env:
+          # Turnstile site key is public — safe in CI
+          VITE_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
+          VITE_API_BASE_URL: http://localhost:8080
+
+  # ── Playwright smoke tests ─────────────────────────────────────────────────
+  # Spins up the full Docker stack, waits for health, then runs Playwright.
+  # Only runs on PRs to main — skip on pushes to main (that triggers deploy).
+  e2e:
+    name: E2E — Playwright smoke
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Write CI .env
+        run: |
+          cat <<'EOF' > .env
+          IMAGE_TAG=ci
+          POSTGRES_USER=zf45
+          POSTGRES_PASSWORD=ci_password
+          POSTGRES_DB=zf45
+          JWT_SECRET=ci_jwt_secret_at_least_32_chars_long
+          JWT_REFRESH_SECRET=ci_refresh_secret_at_least_32_chars
+          JWT_ACCESS_TTL=15m
+          JWT_REFRESH_TTL=7d
+          ADMIN_EMAIL=admin@zoneforty5.tech
+          ADMIN_NAME=CI Admin
+          ADMIN_PASSWORD_HASH=$argon2id$v=19$m=65536,t=3,p=4$ci_placeholder
+          RESEND_API_KEY=re_ci_placeholder
+          EMAIL_FROM=noreply@zoneforty5.tech
+          EMAIL_TO=hello@zoneforty5.tech
+          TURNSTILE_SITE_KEY=1x00000000000000000000AA
+          TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+          R2_ACCOUNT_ID=ci_placeholder
+          R2_ACCESS_KEY_ID=ci_placeholder
+          R2_SECRET_ACCESS_KEY=ci_placeholder
+          R2_BUCKET=zf45-uploads
+          R2_PUBLIC_BASE=https://cdn.zoneforty5.tech
+          R2_ENDPOINT=https://ci_placeholder.r2.cloudflarestorage.com
+          CORS_ORIGIN=
+          CERTBOT_EMAIL=ci@example.com
+          CERTBOT_DOMAIN=localhost
+          LOG_LEVEL=debug
+          EOF
+
+      - name: Build and start stack
+        run: |
+          docker compose -f devops/docker-compose.yml build
+          docker compose -f devops/docker-compose.yml up -d postgres redis api
+        env:
+          IMAGE_TAG: ci
+
+      - name: Wait for API to be healthy
+        run: |
+          for i in $(seq 1 30); do
+            if docker compose -f devops/docker-compose.yml exec -T api \
+               wget -qO- http://localhost:8080/api/health > /dev/null 2>&1; then
+              echo "API is healthy"
+              break
+            fi
+            echo "Waiting for API... attempt $i/30"
+            sleep 5
+          done
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+        working-directory: tests
+
+      - name: Run Playwright smoke tests
+        run: npx playwright test --reporter=github
+        working-directory: tests
+        env:
+          BASE_URL: http://localhost:8080
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: tests/playwright-report/
+          retention-days: 7
+
+      - name: Tear down stack
+        if: always()
+        run: docker compose -f devops/docker-compose.yml down -v

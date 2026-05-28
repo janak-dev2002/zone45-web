@@ -1,0 +1,56 @@
+# Local development overrides — ZoneForty5
+#
+# Usage:
+#   docker compose -f devops/docker-compose.yml -f devops/docker-compose.dev.yml up -d
+#
+# OR (from project root using Makefile):
+#   make dev
+#
+# Differences from production:
+# - API is built from local source (not a GHCR image)
+# - Nginx is built from local source (not a GHCR image)
+# - Postgres port exposed to localhost for GUI clients (TablePlus, pgAdmin)
+# - Redis port exposed to localhost for inspection
+# - Source bind-mounts for live code reload in the API (if using nodemon)
+# - No certbot — TLS not used locally; nginx listens on 80 only
+# - NODE_ENV=development
+
+version: "3.9"
+
+services:
+
+  postgres:
+    ports:
+      - "5432:5432"
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+      target: development
+    image: ""  # override registry image — use local build
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: debug
+    volumes:
+      - ../backend/src:/app/src:ro  # live source; backend uses ts-node or nodemon
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: devops/nginx.Dockerfile
+    image: ""  # override registry image — use local build
+    ports:
+      - "80:80"
+    volumes:
+      # Override: no TLS certs in dev; conf.d/dev.conf below replaces default.conf
+      []
+
+  certbot:
+    # Certbot is not needed in local dev — remove the service entirely
+    entrypoint: ["echo", "certbot disabled in dev"]
+    restart: "no"
