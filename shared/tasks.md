@@ -4,10 +4,10 @@
 ## Sprint Goal
 Deliver the fully functional ZoneForty5 agency website MVP, complete with public SSG pages, secure admin panel, and robust deployment pipeline, by June 1, 2026.
 
-## [DATABASE] — Pending
-- [ ] Initialize `node-pg-migrate` skeleton.
-- [ ] Write migrations for `admin_users`, `portfolio_projects`, `blog_posts`, `tags`, `post_tags`, `contact_submissions`.
-- [ ] Document full schema in `shared/db-schema.md`.
+## [DATABASE] — Completed
+- [x] Initialize `node-pg-migrate` skeleton.
+- [x] Write migrations for `admin_users`, `portfolio_projects`, `blog_posts`, `tags`, `post_tags`, `contact_submissions`.
+- [x] Document full schema in `shared/db-schema.md`. (Migrations written to database/migrations/)
 
 ## [BACKEND] — Pending
 - [ ] Scaffold project: Node 20, Express, TS, Zod, Pino.
