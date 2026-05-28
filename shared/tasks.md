@@ -9,11 +9,19 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] Write migrations for `admin_users`, `portfolio_projects`, `blog_posts`, `tags`, `post_tags`, `contact_submissions`.
 - [x] Document full schema in `shared/db-schema.md`. (Migrations written to database/migrations/)
 
-## [BACKEND] — Pending
-- [ ] Scaffold project: Node 20, Express, TS, Zod, Pino.
-- [ ] Write `shared/api-contracts.md` (schemas & endpoints).
-- [ ] Setup `api.Dockerfile` and `docker-compose.dev.yml`.
-- [ ] Implement API endpoints (Auth, Portfolio, Posts, Contact, Uploads) (blocked by: database schema)
+## [BACKEND] — Completed
+- [x] Scaffold project: Node 20, Express, TS, Zod, Pino.
+- [x] Write `shared/api-contracts.md` (schemas & endpoints).
+- [x] Setup `backend/Dockerfile` (multi-stage: dev + production targets).
+- [x] Implement all 23 API endpoints (Auth, Portfolio, Posts, Contact, Uploads).
+- [x] JWT auth: httpOnly cookie issuance, silent-refresh middleware, logout, forced-logout via Redis.
+- [x] Rate limiting on POST /api/contact and POST /api/auth/login via Redis.
+- [x] Resend integration for contact form notification email (fire-and-forget + 15min cron retry).
+- [x] Cloudflare Turnstile verification on POST /contact and POST /auth/login.
+- [x] Pino structured JSON logging on all requests and errors.
+- [x] Zod schemas for all request bodies (exported via shared-types package).
+- [x] Unit tests (51 passing, 8 suites).
+- [x] Handoff written: `shared/agent-handoffs/backend-done.md`
 
 ## [FRONTEND] — Pending
 - [ ] Scaffold project: React 18, Vite, TS, Tailwind, React Router.
@@ -34,10 +42,10 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [ ] Write E2E Playwright smoke tests (blocked by: deployed application)
 
 ## BLOCKED
-- Backend logic (waiting for database schema)
-- Frontend integration (waiting for api-contracts.md)
-- Deployment (waiting for codebase completion)
+- Frontend integration (waiting for frontend scaffold — backend API is ready)
+- Deployment (waiting for Frontend Agent)
 
 ## COMPLETED
 - [x] Produce system architecture (owner: ARCHITECTURE)
 - [x] All DevOps infrastructure files (owner: DEVOPS) — PR #2 open, awaiting merge
+- [x] All Backend API (owner: BACKEND) — PR raised
