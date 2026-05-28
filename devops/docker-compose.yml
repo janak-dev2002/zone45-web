@@ -1,0 +1,154 @@
+# Production Docker Compose — ZoneForty5
+#
+# DEPLOY NOTE: This file lives in devops/ during development.
+# On the EC2 host it is copied to the repo root:
+#   cp devops/docker-compose.yml docker-compose.yml
+# and run from the repo root with:
+#   docker compose up -d --build
+#
+# All secrets are supplied via a .env file in the same directory as
+# docker-compose.yml — never hardcode secrets here.
+
+version: "3.9"
+
+networks:
+  zf45-net:
+    driver: bridge
+
+volumes:
+  pg_data:
+  redis_data:
+  certbot_certs:
+  certbot_webroot:
+  nginx_logs:
+
+services:
+
+  # ── PostgreSQL 16 ──────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: zf45-postgres
+    restart: unless-stopped
+    networks:
+      - zf45-net
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    # Port 5432 is NOT exposed to the host — API connects via Docker network only
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── Redis 7 (AOF persistence) ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: zf45-redis
+    restart: unless-stopped
+    networks:
+      - zf45-net
+    # AOF persistence: fsync every second — max 1s data loss on crash
+    command: redis-server --appendonly yes --appendfsync everysec
+    volumes:
+      - redis_data:/data
+    # Port 6379 is NOT exposed to the host — API connects via Docker network only
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  # ── Express API (Node 20) ──────────────────────────────────────────────────
+  api:
+    image: ghcr.io/janak-dev2002/zone45-web/api:${IMAGE_TAG:-latest}
+    container_name: zf45-api
+    restart: unless-stopped
+    networks:
+      - zf45-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT:-8080}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_ACCESS_TTL: ${JWT_ACCESS_TTL:-15m}
+      JWT_REFRESH_TTL: ${JWT_REFRESH_TTL:-7d}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_NAME: ${ADMIN_NAME}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      EMAIL_FROM: ${EMAIL_FROM}
+      EMAIL_TO: ${EMAIL_TO}
+      TURNSTILE_SECRET: ${TURNSTILE_SECRET}
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET: ${R2_BUCKET}
+      R2_PUBLIC_BASE: ${R2_PUBLIC_BASE}
+      R2_ENDPOINT: ${R2_ENDPOINT}
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    # Port 8080 is NOT exposed to the host — Nginx proxies to it via Docker network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:${PORT:-8080}/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  # ── Nginx + pre-built frontend (multi-stage) ───────────────────────────────
+  nginx:
+    image: ghcr.io/janak-dev2002/zone45-web/nginx:${IMAGE_TAG:-latest}
+    container_name: zf45-nginx
+    restart: unless-stopped
+    networks:
+      - zf45-net
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certbot_certs:/etc/letsencrypt:ro
+      - certbot_webroot:/var/www/certbot:ro
+      - nginx_logs:/var/log/nginx
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── Certbot — Let's Encrypt certificate renewal ────────────────────────────
+  # Runs certbot renew every 12 hours. Initial cert issuance is a one-time
+  # manual step (see devops/aws/README.md — Initial TLS Bootstrap section).
+  certbot:
+    image: certbot/certbot:v2.11.0
+    container_name: zf45-certbot
+    volumes:
+      - certbot_certs:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
+    # Renew loop — certbot renew is a no-op if certs are not due yet
+    entrypoint: >
+      /bin/sh -c '
+        trap exit TERM;
+        while :; do
+          certbot renew --webroot -w /var/www/certbot --quiet;
+          sleep 12h & wait $${!};
+        done
+      '
+    environment:
+      - CERTBOT_EMAIL=${CERTBOT_EMAIL}
