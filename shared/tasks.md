@@ -84,11 +84,16 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
       Branch: frontend/fix-bug005-form-handlers → main
 
 ## [FRONTEND] — Post-Launch Polish (non-blocking for users)
-- [ ] FIX-005 RE-OPENED: Hydration mismatches #418/#423/#425 still present after PR #16.
-      PR #16 fixed the useMediaQuery/nav case but other SSR/CSR discrepancies remain in public pages.
-      Do a full audit of all public page components for window-dependent logic, Math.random(),
-      date/time calls, or conditional rendering that differs between SSG and browser render.
-- [ ] Raise PR on branch: frontend/fix-hydration-full
+- [x] FIX-005 RE-OPENED: Hydration mismatches #418/#423/#425 resolved — PR #20.
+      Root cause: React Router's StaticRouterProvider injects window.__staticRouterHydrationData
+      as a <script> inside <div id="root"> at SSG time. Browser-side RouterProvider renders
+      {null} at that position. hydrateRoot finds the extra <script> DOM node with no matching
+      fiber and fires errors #418/#423/#425 on every public page.
+      Fix: onFinished hook in vite.config.ts now hoists the script outside the root div after
+      each page is rendered. Full src/ audit also performed — no other render-phase browser
+      API calls found; useMediaQuery already guarded (PR #16).
+- [x] Raise PR on branch: frontend/fix-hydration-full — PR #20:
+      https://github.com/janak-dev2002/zone45-web/pull/20
 
 ## [DEVOPS] — Post-Launch (QA infrastructure only)
 - [ ] Set up staging environment with Cloudflare Turnstile test keys so automated E2E
