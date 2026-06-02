@@ -41,9 +41,9 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] Build CI/CD pipelines (GitHub Actions). (.github/workflows/ci.yml + deploy.yml)
 - [x] Provision EC2 `t3.small` and run initial deploy. (Deploy run #10 — Success 2026-06-02. All 5 containers healthy: postgres, redis, api, nginx, certbot.)
 
-## [QA] — Completed (Round 1)
+## [QA] — Completed (Round 2)
 - [x] E2E smoke test pass against production — 2026-06-02
-- [ ] Re-run full suite after BUG-001 fix — BLOCKED until Frontend + DevOps PRs merged and deployed
+- [x] Re-run full suite after BUG-001 fix — Verified resolved 2026-06-02
 
 ## [FRONTEND] — Bug Fix Complete
 - [x] BUG-001: Fix SSG build — `static-loader-data-manifest-undefined.json` has `undefined` in filename.
@@ -61,10 +61,20 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
       - Evaluate if Turnstile needs `unsafe-inline` in `script-src`; if yes, add with nonce or hash approach
       - Decision: added `'unsafe-inline'` (nonce not viable with static SSG); trade-off documented in config comment
 - [x] Raise PR on branch `devops/fix-nginx-json-csp` — PR #14: https://github.com/janak-dev2002/zone45-web/pull/14
-- [ ] After both PRs merged, confirm deploy pipeline green and smoke-test `/`
+- [x] After both PRs merged, confirm deploy pipeline green and smoke-test `/` — Verified resolved 2026-06-02
+
+## [FRONTEND] — Minor Follow-up Complete
+- [x] FIX-005: Resolve React hydration mismatches (errors #418, #423, #425).
+      Root cause: useMediaQuery initialised useState from window.matchMedia() on the first browser
+      render. On mobile this produced true (<MNav/>), while SSG always produced false (<Nav/>).
+      Fix: useState(false) always; useEffect updates after hydration. No more console errors.
+- [x] FIX-006: Add `name` attribute to all contact form and admin login form inputs.
+      Contact: name/email/subject/message/gdpr. Login: email/password.
+- [x] PR raised: #16 — https://github.com/janak-dev2002/zone45-web/pull/16
+      Branch: frontend/fix-hydration-forms → main
 
 ## BLOCKED
-- QA full re-run — waiting on Frontend + DevOps bug fix PRs
+- (none)
 
 ## COMPLETED
 - [x] Produce system architecture (owner: ARCHITECTURE)

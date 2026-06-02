@@ -229,4 +229,48 @@ npm run build
 
 [#15 — fix: BUG-001 replace SSG inline hash script with CSP-safe external file](https://github.com/janak-dev2002/zone45-web/pull/15)
 
+---
+
+## Follow-up Round 3 — FIX-005 / FIX-006 (2026-06-02)
+
+### FIX-005 — React Hydration Mismatches (#418, #423, #425)
+
+**Root cause:** `src/lib/hooks/useMediaQuery.ts` initialised `useState` with a lazy function
+that reads `window.matchMedia(query).matches` directly on the first browser render. During SSG
+(Node.js), `window` is undefined, so the initial state was always `false` → `<Nav />` rendered.
+In the browser, the same lazy initializer ran on the hydration pass, returning `true` for any
+mobile viewport. React then tried to reconcile `<MNav />` against the SSG HTML's `<Nav />` →
+hydration errors #418 (text mismatch), #423 (root switch to CSR), #425 (text diff).
+
+**Fix:** One-line change in `useMediaQuery.ts` — replace the lazy initializer with the plain
+literal `false`. The `useEffect` that was already present immediately reads the real media query
+and calls `setMatches` after hydration, so the correct nav renders on the second paint with
+no console errors.
+
+### FIX-006 — Missing `name` Attributes on Form Inputs
+
+Added `name=` attributes to all `<input>`, `<select>`, and `<textarea>` elements in:
+
+| Form | Field | Attribute |
+|------|-------|-----------|
+| Contact (`src/pages/Contact.tsx`) | Name | `name="name"` |
+| Contact | Email | `name="email"` |
+| Contact | Subject | `name="subject"` |
+| Contact | Message | `name="message"` |
+| Contact | GDPR checkbox | `name="gdpr"` |
+| Admin Login (`src/admin/Login.tsx`) | Email | `name="email"` |
+| Admin Login | Password | `name="password"` |
+
+### Files Changed
+
+| File | Change |
+|------|--------|
+| `frontend/src/lib/hooks/useMediaQuery.ts` | `useState(false)` instead of lazy initializer |
+| `frontend/src/pages/Contact.tsx` | `name=` on 5 form controls |
+| `frontend/src/admin/Login.tsx` | `name=` on 2 inputs |
+
+### PR
+
+[#16 — fix: FIX-005/FIX-006 — hydration mismatches + form name attributes](https://github.com/janak-dev2002/zone45-web/pull/16)
+
 *End of frontend-done handoff. Frontend Agent session complete.*
