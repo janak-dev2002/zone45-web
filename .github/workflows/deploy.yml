@@ -74,7 +74,11 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     needs: build-and-push
-    # No GitHub Environment used — secrets are repo-level (Settings → Secrets → Actions)
+    # packages: read is required so the GITHUB_TOKEN embedded in the SSH script
+    # can authenticate against GHCR to pull the private packages on EC2.
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - uses: actions/checkout@v4
@@ -87,7 +91,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "devops/docker-compose.yml"
           target: "/home/${{ secrets.EC2_SSH_USER }}/zone45-web/"
-          strip_components: 1  # removes 'devops/' prefix → docker-compose.yml at repo root
+          strip_components: 1
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -98,25 +102,34 @@ jobs:
           envs: IMAGE_TAG,REGISTRY,REPO
           script: |
             set -euo pipefail
+
+            # ── Preflight checks ──────────────────────────────────────────────
+            if [ ! -f /home/${{ secrets.EC2_SSH_USER }}/zone45-web/.env ]; then
+              echo "ERROR: /home/${{ secrets.EC2_SSH_USER }}/zone45-web/.env is missing."
+              echo "Create it from devops/.env.example and fill in real values before deploying."
+              exit 1
+            fi
+
             cd /home/${{ secrets.EC2_SSH_USER }}/zone45-web
 
-            # Authenticate to GHCR
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            # ── Authenticate to GHCR ──────────────────────────────────────────
+            # GITHUB_TOKEN here belongs to the deploy job which declares
+            # permissions: packages: read — so this token can pull from GHCR.
+            echo "${{ secrets.GITHUB_TOKEN }}" | \
+              docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # Pull new images
+            # ── Pull new images ───────────────────────────────────────────────
             docker pull ${{ env.REGISTRY }}/${{ env.REPO }}/api:${{ env.IMAGE_TAG }}
             docker pull ${{ env.REGISTRY }}/${{ env.REPO }}/nginx:${{ env.IMAGE_TAG }}
 
-            # Tag pulled images as the version referenced by IMAGE_TAG env var
+            # ── Start / update services ───────────────────────────────────────
             export IMAGE_TAG=${{ env.IMAGE_TAG }}
-
-            # Bring up updated services (rolling — postgres and redis are unaffected)
             docker compose up -d --no-build
 
-            # Prune dangling images to free disk space
+            # ── Cleanup ───────────────────────────────────────────────────────
             docker image prune -f
 
-            echo "Deploy complete. Running containers:"
+            echo "Deploy complete — running containers:"
             docker compose ps
 
       - name: Smoke-test deployed API
