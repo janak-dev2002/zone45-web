@@ -164,19 +164,26 @@ jobs:
             docker compose ps
 
       - name: Smoke-test deployed API
-        run: |
-          # Poll until healthy or 3-minute timeout.
-          # Cold start on t3.small: postgres init (~30s) + api startup (~15s) + nginx = ~60s.
-          echo "Waiting for stack to become healthy..."
-          for i in $(seq 1 18); do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-              --max-time 5 https://zoneforty5.tech/api/health || echo "000")
-            echo "Attempt $i/18 — HTTP $STATUS"
-            if [ "$STATUS" = "200" ]; then
-              echo "Health check passed"
-              exit 0
-            fi
-            sleep 10
-          done
-          echo "Health check failed after 3 minutes"
-          exit 1
+        # Test the API directly on its internal port via SSH.
+        # Avoids dependency on nginx (TLS bootstrap) and public DNS being set up.
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Waiting for API to be healthy (up to 90s)..."
+            for i in $(seq 1 18); do
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                --max-time 5 http://localhost:8080/api/health 2>/dev/null || echo "000")
+              echo "Attempt $i/18 — HTTP $STATUS"
+              if [ "$STATUS" = "200" ]; then
+                echo "API health check passed"
+                exit 0
+              fi
+              sleep 5
+            done
+            echo "API health check failed after 90s"
+            docker compose -f /home/$USER/zone45-web/docker-compose.yml ps
+            docker logs zf45-api --tail=20
+            exit 1
