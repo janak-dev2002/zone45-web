@@ -26,9 +26,18 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: backend/package-lock.json
+          cache-dependency-path: |
+            backend/package-lock.json
+            shared-types/package-lock.json
 
-      - name: Install dependencies
+      # shared-types has its own zod devDependency; jest resolves
+      # @zf45/shared-types → ../shared-types/src/index.ts which imports zod
+      # from shared-types/node_modules — must be installed before running tests.
+      - name: Install shared-types dependencies
+        run: npm ci --prefer-offline
+        working-directory: shared-types
+
+      - name: Install backend dependencies
         run: npm ci
 
       - name: TypeScript compile check
@@ -55,9 +64,23 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: |
+            frontend/package-lock.json
+            shared-types/package-lock.json
+            backend/package-lock.json
 
-      - name: Install dependencies
+      # frontend/tsconfig.json maps @zf45/shared-types → ../shared-types/src/index.ts
+      # which in turn imports from backend/src/lib/schemas.ts.
+      # All three node_modules directories must exist for tsc and the build to pass.
+      - name: Install backend dependencies
+        run: npm ci --prefer-offline
+        working-directory: backend
+
+      - name: Install shared-types dependencies
+        run: npm ci --prefer-offline
+        working-directory: shared-types
+
+      - name: Install frontend dependencies
         run: npm ci
 
       - name: TypeScript compile check
@@ -69,9 +92,8 @@ jobs:
       - name: Build (SSG)
         run: npm run build
         env:
-          # Turnstile site key is public — safe in CI
-          VITE_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
-          VITE_API_BASE_URL: http://localhost:8080
+          VITE_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY || '1x00000000000000000000AA' }}
+          VITE_API_URL: /api
 
   # ── Playwright smoke tests ─────────────────────────────────────────────────
   # Spins up the full Docker stack, waits for health, then runs Playwright.
