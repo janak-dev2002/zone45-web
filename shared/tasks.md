@@ -45,10 +45,13 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] E2E smoke test pass against production — 2026-06-02
 - [ ] Re-run full suite after BUG-001 fix — BLOCKED until Frontend + DevOps PRs merged and deployed
 
-## [FRONTEND] — Bug Fix Required
-- [ ] BUG-001: Fix SSG build — `static-loader-data-manifest-undefined.json` has `undefined` in filename.
-      Likely a missing/null variable in `vite-react-ssg` config or `ssgOptions`. Correct the manifest naming so the filename resolves properly.
-- [ ] Raise PR on branch `frontend/fix-ssg-manifest`
+## [FRONTEND] — Bug Fix Complete
+- [x] BUG-001: Fix SSG build — `static-loader-data-manifest-undefined.json` has `undefined` in filename.
+      Root cause: production CSP (script-src 'self') blocks the vite-react-ssg inline <script> that
+      sets window.__VITE_REACT_SSG_HASH__. Added ssgOptions.onFinished hook in vite.config.ts that
+      moves the assignment into dist/assets/ssg-init-{hash}.js — a same-origin file CSP 'self' allows.
+- [x] PR raised: #15 — https://github.com/janak-dev2002/zone45-web/pull/15
+      Branch: frontend/fix-ssg-manifest → main
 
 ## [DEVOPS] — Bug Fix Required
 - [x] BUG-001 (Nginx): Add `.json` 404 exception in `default.conf` — `try_files` must NOT fall back to `index.html` for `.json` requests.

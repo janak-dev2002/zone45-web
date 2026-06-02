@@ -161,4 +161,72 @@ All 23 endpoints from `shared/api-contracts.md` are wired in `src/lib/api.ts`.
 
 ---
 
+---
+
+## Bug Fix Round 2 — BUG-001 (2026-06-02)
+
+### Problem
+
+QA smoke test on 2026-06-02 found every page crashing with:
+
+```
+SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+```
+
+The app was requesting `static-loader-data-manifest-undefined.json`.
+
+### Root Cause
+
+`vite-react-ssg` injects `window.__VITE_REACT_SSG_HASH__` as an inline `<script>` tag into every
+SSG-rendered HTML page after rendering completes:
+
+```html
+<script>window.__VITE_REACT_SSG_HASH__ = 'hsthr79ir4'</script>
+```
+
+The production Nginx CSP header (`script-src 'self' https://challenges.cloudflare.com`) blocks all
+inline scripts — no `'unsafe-inline'`. The browser silently refuses to execute this tag, leaving
+`window.__VITE_REACT_SSG_HASH__` as `undefined`. The vite-react-ssg client runtime then constructs:
+
+```
+static-loader-data-manifest-undefined.json
+```
+
+Nginx has no such file, falls back to `index.html` (SPA fallback), the JS tries to parse that HTML
+response as JSON, and React crashes on every page.
+
+### Fix
+
+Added `ssgOptions.onFinished` hook in [frontend/vite.config.ts](../../frontend/vite.config.ts).
+
+After all SSG pages are rendered the hook:
+1. Reads `dist/index.html` and extracts the hash via regex
+2. Writes `dist/assets/ssg-init-{hash}.js` — content: `window.__VITE_REACT_SSG_HASH__='{hash}'`
+3. Rewrites all SSG HTML pages to replace the blocked inline script with
+   `<script src="/assets/ssg-init-{hash}.js"></script>`
+
+The external file is served as a same-origin script (`'self'` is allowed in the CSP). Its filename
+is content-addressed so it is safe for `Cache-Control: immutable` and won't serve stale hashes
+after redeployment.
+
+### Files Changed
+
+| File | Change |
+|------|--------|
+| `frontend/vite.config.ts` | Added `import { readFileSync, writeFileSync, readdirSync } from 'fs'` and `ssgOptions.onFinished` hook |
+
+### Verification
+
+```
+npm run build
+```
+
+- `dist/assets/ssg-init-{hash}.js` present with correct content
+- All SSG HTML pages patched (`<script src="/assets/ssg-init-{hash}.js">`)
+- `dist/static-loader-data-manifest-{hash}.json` correctly named (no `undefined`)
+
+### PR
+
+[#15 — fix: BUG-001 replace SSG inline hash script with CSP-safe external file](https://github.com/janak-dev2002/zone45-web/pull/15)
+
 *End of frontend-done handoff. Frontend Agent session complete.*
