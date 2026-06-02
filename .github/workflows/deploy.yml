@@ -113,8 +113,6 @@ jobs:
             cd /home/${{ secrets.EC2_SSH_USER }}/zone45-web
 
             # ── Authenticate to GHCR ──────────────────────────────────────────
-            # GITHUB_TOKEN here belongs to the deploy job which declares
-            # permissions: packages: read — so this token can pull from GHCR.
             echo "${{ secrets.GITHUB_TOKEN }}" | \
               docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
@@ -122,7 +120,40 @@ jobs:
             docker pull ${{ env.REGISTRY }}/${{ env.REPO }}/api:${{ env.IMAGE_TAG }}
             docker pull ${{ env.REGISTRY }}/${{ env.REPO }}/nginx:${{ env.IMAGE_TAG }}
 
-            # ── Start / update services ───────────────────────────────────────
+            # ── Start postgres + redis, then run migrations ───────────────────
+            # Start DB services first so postgres is ready before the API boots.
+            docker compose up -d postgres redis
+
+            # Wait for postgres to accept connections (up to 90s)
+            POSTGRES_USER=$(grep "^POSTGRES_USER=" .env | cut -d= -f2)
+            POSTGRES_DB=$(grep "^POSTGRES_DB="   .env | cut -d= -f2)
+            for i in $(seq 1 18); do
+              docker exec zf45-postgres pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
+                > /dev/null 2>&1 && break
+              echo "Waiting for postgres... attempt $i/18"
+              sleep 5
+            done
+
+            # Apply each migration — Up section only (sed strips the Down section).
+            # Safe to re-run: psql prints a notice for already-existing objects
+            # but exits 0, so this is idempotent across deploys.
+            REPO_RAW="https://raw.githubusercontent.com/${{ env.REPO }}/main"
+            for m in \
+              000_init_extensions \
+              001_admin_users \
+              002_portfolio_projects \
+              003_blog_posts \
+              004_tags \
+              005_post_tags \
+              006_contact_submissions; do
+              echo "Migration: $m"
+              curl -sL "${REPO_RAW}/database/migrations/${m}.sql" \
+                | sed '/-- Down Migration/,$d' \
+                | docker exec -i zf45-postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+            done
+            echo "Migrations complete."
+
+            # ── Start / update all services ───────────────────────────────────
             export IMAGE_TAG=${{ env.IMAGE_TAG }}
             docker compose up -d --no-build
 
