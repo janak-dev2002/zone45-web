@@ -1,5 +1,5 @@
 # ZoneForty5 — Tasks
-> Last updated: 2026-05-28
+> Last updated: 2026-06-02
 
 ## Sprint Goal
 Deliver the fully functional ZoneForty5 agency website MVP, complete with public SSG pages, secure admin panel, and robust deployment pipeline, by June 1, 2026.
@@ -39,16 +39,17 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] Write Nginx config and multi-stage `nginx.Dockerfile`. (devops/nginx.Dockerfile, devops/nginx/nginx.conf, devops/nginx/conf.d/default.conf)
 - [x] Setup root `docker-compose.yml`. (devops/docker-compose.yml + devops/docker-compose.dev.yml)
 - [x] Build CI/CD pipelines (GitHub Actions). (.github/workflows/ci.yml + deploy.yml)
-- [ ] Provision EC2 `t3.small` and run initial deploy (blocked by: functional codebase — Backend + Frontend agents must deliver first)
+- [x] Provision EC2 `t3.small` and run initial deploy. (Deploy run #10 — Success 2026-06-02. All 5 containers healthy: postgres, redis, api, nginx, certbot.)
 
 ## [QA] — Pending
 - [ ] Write E2E Playwright smoke tests (blocked by: deployed application)
 
 ## BLOCKED
-- Frontend integration (waiting for frontend scaffold — backend API is ready)
-- Deployment (waiting for Frontend Agent)
+- (none — all implementation phases complete)
 
 ## COMPLETED
 - [x] Produce system architecture (owner: ARCHITECTURE)
-- [x] All DevOps infrastructure files (owner: DEVOPS) — PR #2 open, awaiting merge
-- [x] All Backend API (owner: BACKEND) — PR raised
+- [x] Database schema + migrations (owner: DATABASE)
+- [x] Full backend API — 23 endpoints (owner: BACKEND)
+- [x] Frontend — SSG public site + admin panel (owner: FRONTEND)
+- [x] Full DevOps infrastructure + EC2 deploy (owner: DEVOPS) — deploy pipeline green 2026-06-02
