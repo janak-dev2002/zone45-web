@@ -126,7 +126,9 @@ services:
       - certbot_webroot:/var/www/certbot:ro
       - nginx_logs:/var/log/nginx
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost/api/health || exit 1"]
+      # Check that the nginx master process is running.
+      # Avoids the HTTP→HTTPS redirect loop that breaks wget-based checks.
+      test: ["CMD-SHELL", "pgrep nginx || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
