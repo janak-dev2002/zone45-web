@@ -37,7 +37,7 @@ export default function Contact() {
 
   const update = (k: keyof FormState) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => setForm(prev => ({ ...prev, [k]: 'checked' in e.target ? e.target.checked : e.target.value }))
+  ) => setForm(prev => ({ ...prev, [k]: e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value }))
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
