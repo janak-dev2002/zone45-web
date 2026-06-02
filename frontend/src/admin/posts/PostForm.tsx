@@ -77,7 +77,7 @@ export default function PostForm() {
 
   function set(k: keyof PostBody) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const val = 'checked' in e.target ? e.target.checked : e.target.value
+      const val = e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value
       setForm(prev => ({ ...prev, [k]: val }))
     }
   }
