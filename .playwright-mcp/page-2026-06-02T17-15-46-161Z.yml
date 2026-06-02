@@ -1,0 +1,137 @@
+- generic [ref=e2]:
+  - navigation [ref=e324]:
+    - generic [ref=e325]:
+      - link "ZoneForty5" [ref=e326] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e327]:
+          - img [ref=e328]
+          - generic [ref=e330]: ZoneForty5
+      - generic [ref=e331]:
+        - link "Work" [ref=e332] [cursor=pointer]:
+          - /url: /work
+        - link "Notes" [ref=e333] [cursor=pointer]:
+          - /url: /notes
+        - link "About" [ref=e334] [cursor=pointer]:
+          - /url: /about
+        - link "Contact" [ref=e335] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=e336]:
+        - generic [ref=e337]: Booking Q3 2026
+        - link "Start a project →" [ref=e338] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e339]:
+    - generic [ref=e342]:
+      - generic [ref=e343]:
+        - generic [ref=e344]: Contact · Q3 2026 intake
+        - heading "Tell me what's broken. I'll tell you what it takes to fix it." [level=1] [ref=e345]
+        - paragraph [ref=e346]: "Submit the form and you'll hear back inside one business day with one of three answers: (a) a 30-minute call, (b) a referral to someone better-fit, or (c) a polite no with a reason."
+        - generic [ref=e347]:
+          - generic [ref=e348]:
+            - generic [ref=e349]:
+              - img [ref=e350]
+              - generic [ref=e353]: Pager
+            - generic [ref=e354]: hi@zoneforty5.tech
+          - generic [ref=e355]:
+            - generic [ref=e356]:
+              - img [ref=e357]
+              - generic [ref=e360]: Signal
+            - generic [ref=e361]: On request after intake
+          - generic [ref=e362]:
+            - generic [ref=e363]:
+              - img [ref=e364]
+              - generic [ref=e366]: Response window
+            - generic [ref=e367]: 1 business day
+          - generic [ref=e368]:
+            - generic [ref=e371]: Next slot
+            - generic [ref=e372]: Q3 2026 · closes 14 Aug
+        - generic [ref=e373]:
+          - generic [ref=e374]: // what a good first message looks like
+          - generic [ref=e375]: 1. who you are & what you make
+          - generic [ref=e376]: 2. the thing that's broken or missing
+          - generic [ref=e377]: 3. when you need it shipped
+          - generic [ref=e378]: 4. budget range, even a rough one
+      - generic [ref=e380]:
+        - generic [ref=e381]:
+          - generic [ref=e382]: POST /intake
+          - generic [ref=e383]: "id: intake.2026.q3"
+        - generic [ref=e384]:
+          - generic [ref=e385]:
+            - generic [ref=e386]: Name
+            - textbox "Name" [active] [ref=e387]:
+              - /placeholder: Your name
+          - generic [ref=e388]:
+            - generic [ref=e389]: Email
+            - textbox "Email" [ref=e390]:
+              - /placeholder: you@company.com
+              - text: qa-final@zoneforty5.tech
+        - generic [ref=e391]:
+          - generic [ref=e392]: Subject
+          - generic [ref=e393]:
+            - combobox "Subject" [ref=e394]:
+              - option "Full-stack web" [selected]
+              - option "IoT / embedded"
+              - option "Mobile (iOS / Android)"
+              - option "Audit or review"
+              - option "Speaking / press"
+              - option "Something else"
+            - generic:
+              - img
+        - generic [ref=e395]:
+          - generic [ref=e396]:
+            - generic [ref=e397]: Message
+            - generic [ref=e398]: 4913 chars left
+          - textbox "Message" [ref=e399]:
+            - /placeholder: Tell me about the system you want shipped. Include a rough timeline and budget if you have one.
+            - text: Final verification of BUG-005 fix. This message should successfully submit and persist.
+        - generic [ref=e400]:
+          - generic [ref=e401]: Budget range
+          - generic [ref=e402]:
+            - button "< €15k" [ref=e403] [cursor=pointer]
+            - button "€15 — 40k" [ref=e404] [cursor=pointer]
+            - button "€40 — 80k" [ref=e405] [cursor=pointer]
+            - button "€80k+" [ref=e406] [cursor=pointer]
+            - button "Tell me" [ref=e407] [cursor=pointer]
+        - generic [ref=e410]:
+          - checkbox "I understand my message is read by the studio only and deleted within 30 days if we don't engage." [checked] [ref=e411]
+          - generic [ref=e412]: I understand my message is read by the studio only and deleted within 30 days if we don't engage.
+        - generic [ref=e413]:
+          - generic [ref=e414]: Encrypted in transit · TLS 1.3 · No tracking
+          - button "Send intake →" [ref=e415] [cursor=pointer]
+  - contentinfo [ref=e416]:
+    - generic [ref=e417]:
+      - generic [ref=e418]:
+        - generic [ref=e419]:
+          - generic [ref=e420]:
+            - img [ref=e421]
+            - generic [ref=e423]: ZoneForty5
+          - paragraph [ref=e424]: A one-person engineering studio. Full-stack web, IoT, and mobile systems shipped to production.
+          - generic [ref=e426]: Booking Q3 2026
+        - generic [ref=e427]:
+          - generic [ref=e428]: Studio
+          - link "About" [ref=e429] [cursor=pointer]:
+            - /url: /about
+          - link "Selected work" [ref=e430] [cursor=pointer]:
+            - /url: /work
+          - link "Contact" [ref=e431] [cursor=pointer]:
+            - /url: /contact
+          - link "Notes & case studies" [ref=e432] [cursor=pointer]:
+            - /url: /notes
+        - generic [ref=e433]:
+          - generic [ref=e434]: Practice
+          - link "Full-stack web" [ref=e435] [cursor=pointer]:
+            - /url: /work
+          - link "IoT & embedded" [ref=e436] [cursor=pointer]:
+            - /url: /work
+          - link "Mobile (iOS / Android)" [ref=e437] [cursor=pointer]:
+            - /url: /work
+          - link "Agent-assisted delivery" [ref=e438] [cursor=pointer]:
+            - /url: /about
+        - generic [ref=e439]:
+          - generic [ref=e440]: Contact
+          - link "hi@zoneforty5.tech" [ref=e441] [cursor=pointer]:
+            - /url: mailto:hi@zoneforty5.tech
+          - link "GitHub · /janak-dev2002" [ref=e442] [cursor=pointer]:
+            - /url: https://github.com/janak-dev2002
+      - generic [ref=e443]:
+        - generic [ref=e444]: © 2022–2026 ZoneForty5 · Built & hosted by hand
+        - generic [ref=e445]: zoneforty5.tech

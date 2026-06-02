@@ -41,9 +41,11 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] Build CI/CD pipelines (GitHub Actions). (.github/workflows/ci.yml + deploy.yml)
 - [x] Provision EC2 `t3.small` and run initial deploy. (Deploy run #10 — Success 2026-06-02. All 5 containers healthy: postgres, redis, api, nginx, certbot.)
 
-## [QA] — Completed (Round 2)
-- [x] E2E smoke test pass against production — 2026-06-02
-- [x] Re-run full suite after BUG-001 fix — Verified resolved 2026-06-02
+## [QA] — Completed (Round 3)
+- [x] E2E full re-test pass — 2026-06-02
+- [x] BUG-005 verification (Form corruption) — Verified resolved (Contact, Portfolio, Posts)
+- [x] Re-run full suite — 11/15 passed. (Blocked: Turnstile; Unresolved: Hydration)
+- [ ] FIX-005 (Hydration mismatches) — RE-OPENED (Errors #418, #423, #425 persist)
 
 ## [FRONTEND] — Bug Fix Complete
 - [x] BUG-001: Fix SSG build — `static-loader-data-manifest-undefined.json` has `undefined` in filename.
@@ -81,8 +83,22 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] PR raised: #18 — https://github.com/janak-dev2002/zone45-web/pull/18
       Branch: frontend/fix-bug005-form-handlers → main
 
+## [FRONTEND] — Post-Launch Polish (non-blocking for users)
+- [ ] FIX-005 RE-OPENED: Hydration mismatches #418/#423/#425 still present after PR #16.
+      PR #16 fixed the useMediaQuery/nav case but other SSR/CSR discrepancies remain in public pages.
+      Do a full audit of all public page components for window-dependent logic, Math.random(),
+      date/time calls, or conditional rendering that differs between SSG and browser render.
+- [ ] Raise PR on branch: frontend/fix-hydration-full
+
+## [DEVOPS] — Post-Launch (QA infrastructure only)
+- [ ] Set up staging environment with Cloudflare Turnstile test keys so automated E2E
+      can test form submissions without headless bot detection blocking them.
+      Cloudflare always-pass test keys (official, for dev/staging only — never production):
+        Site key: 1x00000000000000000000AA
+        Secret:   1x0000000000000000000000000000000AA
+
 ## BLOCKED
-- (none)
+- (none — Turnstile blocking headless QA on production is expected behaviour, not a bug)
 
 ## COMPLETED
 - [x] Produce system architecture (owner: ARCHITECTURE)

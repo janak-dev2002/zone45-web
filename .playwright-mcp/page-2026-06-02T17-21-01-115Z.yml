@@ -1,0 +1,87 @@
+- generic [ref=e54]:
+  - complementary [ref=e55]:
+    - generic [ref=e56]:
+      - generic [ref=e57]:
+        - img [ref=e58]
+        - generic [ref=e60]: ZoneForty5
+      - generic [ref=e61]: admin
+    - navigation [ref=e62]:
+      - generic [ref=e63]: Content
+      - link "Portfolio" [ref=e64] [cursor=pointer]:
+        - /url: /admin/portfolio
+        - img [ref=e65]
+        - generic [ref=e69]: Portfolio
+      - link "Posts" [ref=e70] [cursor=pointer]:
+        - /url: /admin/posts
+        - img [ref=e71]
+        - generic [ref=e74]: Posts
+      - link "Contact" [ref=e75] [cursor=pointer]:
+        - /url: /admin/contact
+        - img [ref=e76]
+        - generic [ref=e79]: Contact
+      - generic [ref=e80]: Studio
+      - link "View site" [ref=e81] [cursor=pointer]:
+        - /url: /
+        - img [ref=e82]
+        - generic [ref=e85]: View site
+    - generic [ref=e86]:
+      - generic [ref=e87]: JS
+      - generic [ref=e88]:
+        - generic [ref=e89]: Janaka Sangeeth
+        - generic [ref=e90]: sangeeth.jdev@gmail.com
+      - button "Sign out" [ref=e91] [cursor=pointer]:
+        - img [ref=e92]
+  - generic [ref=e94]:
+    - banner [ref=e95]:
+      - generic [ref=e97]:
+        - textbox "Search" [ref=e98]:
+          - /placeholder: Search…
+        - img [ref=e100]
+        - generic [ref=e103]: ⌘K
+      - generic [ref=e105]: prod · all systems go
+    - main [ref=e106]:
+      - generic [ref=e184]:
+        - generic [ref=e185]:
+          - generic [ref=e186]: admin
+          - generic [ref=e187]: /
+          - generic [ref=e188]: portfolio
+        - generic [ref=e189]:
+          - generic [ref=e190]:
+            - heading "Portfolio" [level=1] [ref=e191]
+            - paragraph [ref=e192]: 1 projects · 1 live
+          - link "New project" [ref=e194] [cursor=pointer]:
+            - /url: /admin/portfolio/new
+            - img [ref=e195]
+            - text: New project
+        - generic [ref=e197]:
+          - generic [ref=e198]:
+            - button "All" [ref=e199] [cursor=pointer]
+            - button "Live" [ref=e200] [cursor=pointer]
+            - button "Draft" [ref=e201] [cursor=pointer]
+          - generic [ref=e202]: "Sort: updated ↓"
+        - table [ref=e203]:
+          - rowgroup [ref=e204]:
+            - row "Project Status Updated" [ref=e205]:
+              - columnheader "Project" [ref=e206]
+              - columnheader "Status" [ref=e207]
+              - columnheader "Updated" [ref=e208]
+              - columnheader [ref=e209]
+          - rowgroup [ref=e210]:
+            - row "Final QA Launch Project /final-qa-launch-project Live 2026-06-02 View live Edit Delete" [ref=e211]:
+              - cell "Final QA Launch Project /final-qa-launch-project" [ref=e212]:
+                - generic [ref=e213]:
+                  - generic [ref=e214]: Final QA Launch Project
+                  - generic [ref=e215]: /final-qa-launch-project
+              - cell "Live" [ref=e216]:
+                - generic [ref=e217]: Live
+              - cell "2026-06-02" [ref=e219]
+              - cell "View live Edit Delete" [ref=e220]:
+                - generic [ref=e221]:
+                  - link "View live" [ref=e222] [cursor=pointer]:
+                    - /url: /work/final-qa-launch-project
+                    - img [ref=e223]
+                  - link "Edit" [ref=e226] [cursor=pointer]:
+                    - /url: /admin/portfolio/4a5394fb-e3a6-479b-bd7e-aa6ab935c506
+                    - img [ref=e227]
+                  - button "Delete" [ref=e230] [cursor=pointer]:
+                    - img [ref=e231]

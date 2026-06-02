@@ -1,0 +1,40 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e8]
+        - generic [ref=e10]: ZoneForty5
+      - generic [ref=e11]:
+        - text: Studio admin · v2026
+        - heading "Internal console." [level=1] [ref=e12]
+        - paragraph [ref=e13]: CMS for the public site, intake queue, and project ledger. Not a SaaS — single tenant, single user.
+    - generic [ref=e14]:
+      - generic [ref=e15]: // session
+      - generic [ref=e16]: $ jwt sign --aud=admin --ttl=15m
+      - generic [ref=e17]: → token issued, 15m expiry
+      - generic [ref=e18]: "→ device cookie: hardened (HttpOnly · SameSite=strict)"
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: Sign in
+        - generic [ref=e23]: POST /auth/login
+      - heading "Studio admin" [level=2] [ref=e24]
+      - paragraph [ref=e25]: JWT auth · single user · 15-minute session.
+      - generic [ref=e26]:
+        - generic [ref=e27]: Email
+        - generic [ref=e28]:
+          - textbox "Email" [ref=e29]:
+            - /placeholder: admin@zoneforty5.tech
+          - img [ref=e31]
+      - generic [ref=e34]:
+        - generic [ref=e36]: Password
+        - generic [ref=e37]:
+          - textbox "Password" [ref=e38]:
+            - /placeholder: ••••••••••••
+          - img [ref=e40]
+          - button "Show password" [ref=e43] [cursor=pointer]:
+            - img [ref=e44]
+      - button "Sign in →" [ref=e47] [cursor=pointer]
+      - generic [ref=e48]:
+        - generic [ref=e49]: TLS 1.3 · jwt-hs256
+        - generic [ref=e50]: single user
