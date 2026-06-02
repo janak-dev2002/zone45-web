@@ -86,12 +86,21 @@ export default defineConfig({
 
       const inlineScript = `<script>window.__VITE_REACT_SSG_HASH__ = '${hash}'</script>`
       const externalScript = `<script src="/assets/${hashFile}"></script>`
+      // React Router's StaticRouterProvider injects window.__staticRouterHydrationData
+      // as a <script> inside <div id="root">, but the browser-side RouterProvider only
+      // renders {null} at that position.  React's hydrateRoot finds the extra <script>
+      // DOM node with no matching fiber and throws errors #418/#423/#425 on every page.
+      // Fix: hoist the script outside the root div so React never sees it during hydration.
+      const routerDataScriptRe = /(<script>window\.__staticRouterHydrationData[^<]*<\/script>)(<\/div>)/
       for (const file of readdirSync(outDir).filter((f) => (f as string).endsWith('.html'))) {
         const filePath = path.join(outDir, String(file))
-        const html = readFileSync(filePath, 'utf-8')
+        let html = readFileSync(filePath, 'utf-8')
         if (html.includes(inlineScript)) {
-          writeFileSync(filePath, html.replace(inlineScript, externalScript))
+          html = html.replace(inlineScript, externalScript)
         }
+        // Move __staticRouterHydrationData script outside #root
+        html = html.replace(routerDataScriptRe, '$2\n$1')
+        writeFileSync(filePath, html)
       }
     },
   },
