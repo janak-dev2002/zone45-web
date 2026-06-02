@@ -1,0 +1,99 @@
+- generic [ref=e57]:
+  - complementary [ref=e58]:
+    - generic [ref=e59]:
+      - generic [ref=e60]:
+        - img [ref=e61]
+        - generic [ref=e63]: ZoneForty5
+      - generic [ref=e64]: admin
+    - navigation [ref=e65]:
+      - generic [ref=e66]: Content
+      - link "Portfolio" [ref=e67] [cursor=pointer]:
+        - /url: /admin/portfolio
+        - img [ref=e68]
+        - generic [ref=e72]: Portfolio
+      - link "Posts" [ref=e73] [cursor=pointer]:
+        - /url: /admin/posts
+        - img [ref=e74]
+        - generic [ref=e77]: Posts
+      - link "Contact" [ref=e78] [cursor=pointer]:
+        - /url: /admin/contact
+        - img [ref=e79]
+        - generic [ref=e82]: Contact
+      - generic [ref=e83]: Studio
+      - link "View site" [ref=e84] [cursor=pointer]:
+        - /url: /
+        - img [ref=e85]
+        - generic [ref=e88]: View site
+    - generic [ref=e89]:
+      - generic [ref=e90]: JS
+      - generic [ref=e91]:
+        - generic [ref=e92]: Janaka Sangeeth
+        - generic [ref=e93]: sangeeth.jdev@gmail.com
+      - button "Sign out" [ref=e94] [cursor=pointer]:
+        - img [ref=e95]
+  - generic [ref=e97]:
+    - banner [ref=e98]:
+      - generic [ref=e100]:
+        - textbox "Search" [ref=e101]:
+          - /placeholder: Search…
+        - img [ref=e103]
+        - generic [ref=e106]: ⌘K
+      - generic [ref=e108]: prod · all systems go
+    - main [ref=e109]:
+      - generic [ref=e138]:
+        - generic [ref=e139]:
+          - link "Portfolio" [ref=e140] [cursor=pointer]:
+            - /url: /admin/portfolio
+          - generic [ref=e141]: /
+          - generic [ref=e142]: New project
+        - generic [ref=e143]:
+          - heading "New project" [level=1] [ref=e144]
+          - generic [ref=e145]:
+            - link "Cancel" [ref=e146] [cursor=pointer]:
+              - /url: /admin/portfolio
+            - button "Save project" [ref=e147] [cursor=pointer]
+        - generic [ref=e148]:
+          - generic [ref=e149]:
+            - generic [ref=e150]:
+              - generic [ref=e151]: Slug
+              - textbox "Slug" [ref=e152]:
+                - /placeholder: project-slug
+            - generic [ref=e153]:
+              - generic [ref=e154]: Title
+              - textbox "Title" [ref=e155]:
+                - /placeholder: Project title
+          - generic [ref=e156]:
+            - generic [ref=e157]: Description (max 280 chars)
+            - textbox "Description (max 280 chars)" [ref=e158]:
+              - /placeholder: Short description…
+            - generic [ref=e159]: 280 left
+          - generic [ref=e160]:
+            - generic [ref=e161]: Body (Markdown)
+            - textbox "Body (Markdown)" [ref=e162]:
+              - /placeholder: "# Project overview..."
+          - generic [ref=e163]:
+            - generic [ref=e164]: Tech stack
+            - generic [ref=e165]:
+              - textbox "Add technology…" [ref=e166]
+              - button "Add" [ref=e167] [cursor=pointer]
+          - generic [ref=e168]:
+            - generic [ref=e169]: Outcome (optional)
+            - textbox "Outcome (optional)" [ref=e170]:
+              - /placeholder: Key result or metric…
+          - generic [ref=e171]:
+            - generic [ref=e172]:
+              - generic [ref=e173]: Project URL (optional)
+              - textbox "Project URL (optional)" [ref=e174]:
+                - /placeholder: https://…
+            - generic [ref=e175]:
+              - generic [ref=e176]: Sort order
+              - spinbutton "Sort order" [ref=e177]: "0"
+          - generic [ref=e178]:
+            - generic [ref=e179]: Cover image
+            - generic [ref=e180]:
+              - button "Upload image" [ref=e181] [cursor=pointer]
+              - generic [ref=e182]: or
+              - textbox "Paste image URL…" [ref=e183]
+          - generic [ref=e184]:
+            - checkbox "Published (visible on public site)" [ref=e185]
+            - generic [ref=e186]: Published (visible on public site)

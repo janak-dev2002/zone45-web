@@ -273,4 +273,52 @@ Added `name=` attributes to all `<input>`, `<select>`, and `<textarea>` elements
 
 [#16 — fix: FIX-005/FIX-006 — hydration mismatches + form name attributes](https://github.com/janak-dev2002/zone45-web/pull/16)
 
+---
+
+## Bug Fix Round 4 — BUG-005 (2026-06-02)
+
+### Problem
+
+All form text fields on the live site rendered `"false"` immediately on every keystroke. Contact form and admin portfolio/post create/edit were completely broken.
+
+### Root Cause
+
+Three form handlers used `'checked' in e.target` to distinguish checkbox inputs from text inputs:
+
+```ts
+const val = 'checked' in e.target ? e.target.checked : e.target.value
+```
+
+The `'in'` operator returns `true` for **every** `HTMLInputElement` (the DOM spec defines `.checked` on all input elements, not just checkboxes). For `type="text"` inputs, `.checked` is always `false`. So every onChange event set state to the boolean `false`, which React serialises as the string `"false"` in the rendered input's value attribute.
+
+### Affected Files
+
+| File | Line |
+|------|------|
+| `frontend/src/pages/Contact.tsx` | 40 |
+| `frontend/src/admin/portfolio/PortfolioForm.tsx` | 85 |
+| `frontend/src/admin/posts/PostForm.tsx` | 80 |
+
+QA identified two files; a grep scan found the identical bug in `PostForm.tsx` — fixed in the same PR.
+
+### Fix
+
+Replace the `'in'` operator guard with an explicit type check:
+
+```diff
+- 'checked' in e.target ? e.target.checked : e.target.value
++ e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value
+```
+
+`PortfolioForm.tsx` also has a number coercion branch which was preserved:
+```ts
+e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked
+  : e.target.type === 'number' ? Number(e.target.value)
+  : e.target.value
+```
+
+### PR
+
+[#18 — fix: BUG-005 — correct form event handler checkbox detection](https://github.com/janak-dev2002/zone45-web/pull/18)
+
 *End of frontend-done handoff. Frontend Agent session complete.*

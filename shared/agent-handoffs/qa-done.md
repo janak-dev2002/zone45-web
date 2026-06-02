@@ -2,21 +2,25 @@
 
 > Agent: QA (Gemini 3.1 Pro)
 > Completed: 2026-06-02
-> Status: **PASSED — ALL CRITICAL BUGS RESOLVED**
+> Status: **FAILED — MAJOR STATE CORRUPTION BUG**
 
 ---
 
 ## Summary
-The Round 2 QA pass of the ZoneForty5 website was successful. All critical blockers (BUG-001) and major accessibility issues (BUG-002) have been resolved. The site is now stable and ready for final client review.
+The Round 2 QA pass confirms that the Round 1 hydration blocker is fixed. However, the site is **not launch-ready** due to a major bug in form state management.
 
-## Key Verifications
-- **BUG-001 FIXED:** Frontend hydration is successful; the error overlay is gone.
-- **BUG-002 FIXED:** Admin login and Contact form are interactive.
-- **BUG-003 FIXED:** CSP violations are resolved.
-- **BUG-004 FIXED:** Route-based meta tags update correctly.
+## Major Findings
+- **BUG-005 [MAJOR]:** All form inputs (Contact & Admin) are corrupted. Typing into any field sets its value to `"false"`.
+- **Root Cause:** Incorrect use of `'checked' in e.target` in event handlers. It returns `true` for text inputs but retrieves a `false` value, overwriting valid user input.
 
-## Remaining Observations
-- **Hydration Warnings:** React hydration mismatches (Error #418/425) are present in the console. These are non-blocking but should be tuned for optimal SSG performance.
-- **Form Inputs:** missing `name` attributes on some inputs.
+## Verifications
+- **Admin Login:** SUCCESS (Authenticated as `sangeeth.jdev@gmail.com`).
+- **Public UI:** SUCCESS (Hydration fixed, navigation smooth).
+- **SEO/Meta:** SUCCESS.
+- **Infra/CSP:** SUCCESS.
 
-Full details are in `shared\agent-handoffs\qa-report-round2.md`. The project is now in a **Release Candidate** state.
+## Next Steps for Developers
+1. **Fix Form Handlers:** Update `PortfolioForm.tsx` and `Contact.tsx` handlers to check `e.target.type === 'checkbox'` instead of using the `in` operator.
+2. **Fix Hydration Mismatches:** Resolve Minified React errors #418/425 to ensure stable production behavior.
+
+Full technical details in `shared\agent-handoffs\qa-report-round2.md`.
