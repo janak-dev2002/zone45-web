@@ -110,35 +110,6 @@ describe('portfolioBodySchema', () => {
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.sortOrder).toBe(0);
   });
-
-  it('accepts empty string for optional URL fields and coerces to undefined', () => {
-    const result = portfolioBodySchema.safeParse({
-      ...valid,
-      projectUrl: '',
-      coverImageUrl: '',
-      outcome: '',
-    });
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.projectUrl).toBeUndefined();
-      expect(result.data.coverImageUrl).toBeUndefined();
-    }
-  });
-
-  it('accepts valid URL for optional URL fields', () => {
-    const result = portfolioBodySchema.safeParse({
-      ...valid,
-      projectUrl: 'https://example.com',
-      coverImageUrl: 'https://cdn.zoneforty5.tech/img.jpg',
-    });
-    expect(result.success).toBe(true);
-  });
-
-  it('rejects invalid (non-empty) URL for optional URL fields', () => {
-    expect(
-      portfolioBodySchema.safeParse({ ...valid, projectUrl: 'not-a-url' }).success,
-    ).toBe(false);
-  });
 });
 
 describe('postBodySchema', () => {

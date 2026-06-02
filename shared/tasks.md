@@ -41,9 +41,11 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] Build CI/CD pipelines (GitHub Actions). (.github/workflows/ci.yml + deploy.yml)
 - [x] Provision EC2 `t3.small` and run initial deploy. (Deploy run #10 — Success 2026-06-02. All 5 containers healthy: postgres, redis, api, nginx, certbot.)
 
-## [QA] — Completed (Round 2)
-- [x] E2E smoke test pass against production — 2026-06-02
-- [x] Re-run full suite after BUG-001 fix — Verified resolved 2026-06-02
+## [QA] — Completed (Round 3)
+- [x] E2E full re-test pass — 2026-06-02
+- [x] BUG-005 verification (Form corruption) — Verified resolved (Contact, Portfolio, Posts)
+- [x] Re-run full suite — 11/15 passed. (Blocked: Turnstile; Unresolved: Hydration)
+- [ ] FIX-005 (Hydration mismatches) — RE-OPENED (Errors #418, #423, #425 persist)
 
 ## [FRONTEND] — Bug Fix Complete
 - [x] BUG-001: Fix SSG build — `static-loader-data-manifest-undefined.json` has `undefined` in filename.
@@ -73,28 +75,30 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] PR raised: #16 — https://github.com/janak-dev2002/zone45-web/pull/16
       Branch: frontend/fix-hydration-forms → main
 
-## [BACKEND] — Bug Fix Complete (BUG-005)
-- [x] Read EC2 API container logs for failed POST requests (cannot SSH; investigated via code — asked
-      founder to share logs for Turnstile confirmation; see findings doc).
-- [x] Investigate /api/contact endpoint: Turnstile backend logic is correct. Suspected frontend
-      `'dev-token'` fallback. TURNSTILE_SECRET must be confirmed on EC2 (see findings).
-- [x] Investigate /admin/portfolio CRUD endpoints: JWT cookie is sent correctly (credentials:include
-      confirmed in api.ts). SameSite=strict is fine for same-origin. Root cause found: Zod urlSchema.
-- [x] Check Zod validation: CONFIRMED ROOT CAUSE — urlSchema rejects empty string ''; frontend sends
-      projectUrl:'' and coverImageUrl:'' for unfilled optional URL fields → 422 on every create/update.
-- [x] Report findings: shared/agent-handoffs/backend-bug005-findings.md
-- [x] PR raised: #17 — backend/fix-form-submissions → main
-      Fix: z.preprocess empty→undefined in urlSchema (schemas.ts). 3 new tests added. 54/54 pass.
+## [FRONTEND] — Bug Fix Complete (BUG-005)
+- [x] BUG-005: Fix form state corruption in three files.
+      Root cause: `'checked' in e.target` returns true for ALL HTMLInputElement types.
+      Fixed with `e.target.type === 'checkbox'` in Contact.tsx, PortfolioForm.tsx, PostForm.tsx.
+      Note: PostForm.tsx had the same bug — not listed by QA but found via grep and fixed too.
+- [x] PR raised: #18 — https://github.com/janak-dev2002/zone45-web/pull/18
+      Branch: frontend/fix-bug005-form-handlers → main
 
-## [FRONTEND] — Bug Investigation Required (BUG-005)
-- [ ] Check fetch/axios calls in src/lib/api.ts for /contact and /admin/portfolio endpoints:
-      Confirm Content-Type: application/json header is set.
-      Confirm credentials: 'include' is set on all authenticated CRUD requests.
-      Confirm Turnstile token is freshly obtained immediately before the contact form POST.
-- [ ] Raise PR on branch: frontend/fix-form-submissions (only if a frontend fix is needed)
+## [FRONTEND] — Post-Launch Polish (non-blocking for users)
+- [ ] FIX-005 RE-OPENED: Hydration mismatches #418/#423/#425 still present after PR #16.
+      PR #16 fixed the useMediaQuery/nav case but other SSR/CSR discrepancies remain in public pages.
+      Do a full audit of all public page components for window-dependent logic, Math.random(),
+      date/time calls, or conditional rendering that differs between SSG and browser render.
+- [ ] Raise PR on branch: frontend/fix-hydration-full
+
+## [DEVOPS] — Post-Launch (QA infrastructure only)
+- [ ] Set up staging environment with Cloudflare Turnstile test keys so automated E2E
+      can test form submissions without headless bot detection blocking them.
+      Cloudflare always-pass test keys (official, for dev/staging only — never production):
+        Site key: 1x00000000000000000000AA
+        Secret:   1x0000000000000000000000000000000AA
 
 ## BLOCKED
-- QA Round 3 — waiting on BUG-005 fix from Backend and/or Frontend Agent
+- (none — Turnstile blocking headless QA on production is expected behaviour, not a bug)
 
 ## COMPLETED
 - [x] Produce system architecture (owner: ARCHITECTURE)

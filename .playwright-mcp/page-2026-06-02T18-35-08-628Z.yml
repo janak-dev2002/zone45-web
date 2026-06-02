@@ -1,0 +1,136 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - link "ZoneForty5" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]:
+          - img [ref=e7]
+          - generic [ref=e9]: ZoneForty5
+      - generic [ref=e10]:
+        - link "Work" [ref=e11] [cursor=pointer]:
+          - /url: /work
+        - link "Notes" [ref=e12] [cursor=pointer]:
+          - /url: /notes
+        - link "About" [ref=e13] [cursor=pointer]:
+          - /url: /about
+        - link "Contact" [ref=e14] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=e15]:
+        - generic [ref=e16]: Booking Q3 2026
+        - link "Start a project →" [ref=e17] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e18]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]: Contact · Q3 2026 intake
+        - heading "Tell me what's broken. I'll tell you what it takes to fix it." [level=1] [ref=e24]
+        - paragraph [ref=e25]: "Submit the form and you'll hear back inside one business day with one of three answers: (a) a 30-minute call, (b) a referral to someone better-fit, or (c) a polite no with a reason."
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]:
+              - img [ref=e29]
+              - generic [ref=e32]: Pager
+            - generic [ref=e33]: hi@zoneforty5.tech
+          - generic [ref=e34]:
+            - generic [ref=e35]:
+              - img [ref=e36]
+              - generic [ref=e39]: Signal
+            - generic [ref=e40]: On request after intake
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - img [ref=e43]
+              - generic [ref=e45]: Response window
+            - generic [ref=e46]: 1 business day
+          - generic [ref=e47]:
+            - generic [ref=e50]: Next slot
+            - generic [ref=e51]: Q3 2026 · closes 14 Aug
+        - generic [ref=e52]:
+          - generic [ref=e53]: // what a good first message looks like
+          - generic [ref=e54]: 1. who you are & what you make
+          - generic [ref=e55]: 2. the thing that's broken or missing
+          - generic [ref=e56]: 3. when you need it shipped
+          - generic [ref=e57]: 4. budget range, even a rough one
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - generic [ref=e61]: POST /intake
+          - generic [ref=e62]: "id: intake.2026.q3"
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - generic [ref=e65]: Name
+            - textbox "Name" [ref=e66]:
+              - /placeholder: Your name
+          - generic [ref=e67]:
+            - generic [ref=e68]: Email
+            - textbox "Email" [ref=e69]:
+              - /placeholder: you@company.com
+        - generic [ref=e70]:
+          - generic [ref=e71]: Subject
+          - generic [ref=e72]:
+            - combobox "Subject" [ref=e73]:
+              - option "Full-stack web" [selected]
+              - option "IoT / embedded"
+              - option "Mobile (iOS / Android)"
+              - option "Audit or review"
+              - option "Speaking / press"
+              - option "Something else"
+            - generic:
+              - img
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - generic [ref=e76]: Message
+            - generic [ref=e77]: 5000 chars left
+          - textbox "Message" [ref=e78]:
+            - /placeholder: Tell me about the system you want shipped. Include a rough timeline and budget if you have one.
+        - generic [ref=e79]:
+          - generic [ref=e80]: Budget range
+          - generic [ref=e81]:
+            - button "< €15k" [ref=e82] [cursor=pointer]
+            - button "€15 — 40k" [ref=e83] [cursor=pointer]
+            - button "€40 — 80k" [ref=e84] [cursor=pointer]
+            - button "€80k+" [ref=e85] [cursor=pointer]
+            - button "Tell me" [ref=e86] [cursor=pointer]
+        - generic [ref=e87]:
+          - checkbox "I understand my message is read by the studio only and deleted within 30 days if we don't engage." [checked] [ref=e88]
+          - generic [ref=e89]: I understand my message is read by the studio only and deleted within 30 days if we don't engage.
+        - generic [ref=e126]: Validation failed
+        - generic [ref=e90]:
+          - generic [ref=e91]: Encrypted in transit · TLS 1.3 · No tracking
+          - button "Send intake →" [ref=e127] [cursor=pointer]
+  - contentinfo [ref=e93]:
+    - generic [ref=e94]:
+      - generic [ref=e95]:
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - img [ref=e98]
+            - generic [ref=e100]: ZoneForty5
+          - paragraph [ref=e101]: A one-person engineering studio. Full-stack web, IoT, and mobile systems shipped to production.
+          - generic [ref=e103]: Booking Q3 2026
+        - generic [ref=e104]:
+          - generic [ref=e105]: Studio
+          - link "About" [ref=e106] [cursor=pointer]:
+            - /url: /about
+          - link "Selected work" [ref=e107] [cursor=pointer]:
+            - /url: /work
+          - link "Contact" [ref=e108] [cursor=pointer]:
+            - /url: /contact
+          - link "Notes & case studies" [ref=e109] [cursor=pointer]:
+            - /url: /notes
+        - generic [ref=e110]:
+          - generic [ref=e111]: Practice
+          - link "Full-stack web" [ref=e112] [cursor=pointer]:
+            - /url: /work
+          - link "IoT & embedded" [ref=e113] [cursor=pointer]:
+            - /url: /work
+          - link "Mobile (iOS / Android)" [ref=e114] [cursor=pointer]:
+            - /url: /work
+          - link "Agent-assisted delivery" [ref=e115] [cursor=pointer]:
+            - /url: /about
+        - generic [ref=e116]:
+          - generic [ref=e117]: Contact
+          - link "hi@zoneforty5.tech" [ref=e118] [cursor=pointer]:
+            - /url: mailto:hi@zoneforty5.tech
+          - link "GitHub · /janak-dev2002" [ref=e119] [cursor=pointer]:
+            - /url: https://github.com/janak-dev2002
+      - generic [ref=e120]:
+        - generic [ref=e121]: © 2022–2026 ZoneForty5 · Built & hosted by hand
+        - generic [ref=e122]: zoneforty5.tech

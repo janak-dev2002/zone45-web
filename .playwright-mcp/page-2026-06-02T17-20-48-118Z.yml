@@ -1,0 +1,70 @@
+- generic [ref=e54]:
+  - complementary [ref=e55]:
+    - generic [ref=e56]:
+      - generic [ref=e57]:
+        - img [ref=e58]
+        - generic [ref=e60]: ZoneForty5
+      - generic [ref=e61]: admin
+    - navigation [ref=e62]:
+      - generic [ref=e63]: Content
+      - link "Portfolio" [ref=e64] [cursor=pointer]:
+        - /url: /admin/portfolio
+        - img [ref=e65]
+        - generic [ref=e69]: Portfolio
+      - link "Posts" [ref=e70] [cursor=pointer]:
+        - /url: /admin/posts
+        - img [ref=e71]
+        - generic [ref=e74]: Posts
+      - link "Contact" [ref=e75] [cursor=pointer]:
+        - /url: /admin/contact
+        - img [ref=e76]
+        - generic [ref=e79]: Contact
+      - generic [ref=e80]: Studio
+      - link "View site" [ref=e81] [cursor=pointer]:
+        - /url: /
+        - img [ref=e82]
+        - generic [ref=e85]: View site
+    - generic [ref=e86]:
+      - generic [ref=e87]: JS
+      - generic [ref=e88]:
+        - generic [ref=e89]: Janaka Sangeeth
+        - generic [ref=e90]: sangeeth.jdev@gmail.com
+      - button "Sign out" [ref=e91] [cursor=pointer]:
+        - img [ref=e92]
+  - generic [ref=e94]:
+    - banner [ref=e95]:
+      - generic [ref=e97]:
+        - textbox "Search" [ref=e98]:
+          - /placeholder: Search…
+        - img [ref=e100]
+        - generic [ref=e103]: ⌘K
+      - generic [ref=e105]: prod · all systems go
+    - main [ref=e106]:
+      - generic [ref=e107]:
+        - generic [ref=e108]:
+          - generic [ref=e109]: admin
+          - generic [ref=e110]: /
+          - generic [ref=e111]: portfolio
+        - generic [ref=e112]:
+          - generic [ref=e113]:
+            - heading "Portfolio" [level=1] [ref=e114]
+            - paragraph [ref=e115]: 0 projects · 0 live
+          - link "New project" [ref=e117] [cursor=pointer]:
+            - /url: /admin/portfolio/new
+            - img [ref=e118]
+            - text: New project
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - button "All" [ref=e122] [cursor=pointer]
+            - button "Live" [ref=e123] [cursor=pointer]
+            - button "Draft" [ref=e124] [cursor=pointer]
+          - generic [ref=e125]: "Sort: updated ↓"
+        - table [ref=e126]:
+          - rowgroup [ref=e127]:
+            - row "Project Status Updated" [ref=e128]:
+              - columnheader "Project" [ref=e129]
+              - columnheader "Status" [ref=e130]
+              - columnheader "Updated" [ref=e131]
+              - columnheader [ref=e132]
+          - rowgroup
+        - generic [ref=e134]: // no items match current filter

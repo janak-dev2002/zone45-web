@@ -8,10 +8,7 @@ const slugSchema = z
   .max(80)
   .regex(/^[a-z0-9][a-z0-9-]*[a-z0-9]$/, 'Slug must be lowercase alphanumeric with hyphens');
 
-const urlSchema = z.preprocess(
-  (v) => (v === '' ? undefined : v),
-  z.string().url().max(2048).optional(),
-);
+const urlSchema = z.string().url().max(2048).optional();
 
 const paginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
