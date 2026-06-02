@@ -121,11 +121,18 @@ jobs:
 
       - name: Smoke-test deployed API
         run: |
-          sleep 15  # brief wait for containers to stabilise
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            https://zoneforty5.tech/api/health)
-          if [ "$STATUS" != "200" ]; then
-            echo "Health check failed — HTTP $STATUS"
-            exit 1
-          fi
-          echo "Health check passed — HTTP $STATUS"
+          # Poll until healthy or 3-minute timeout.
+          # Cold start on t3.small: postgres init (~30s) + api startup (~15s) + nginx = ~60s.
+          echo "Waiting for stack to become healthy..."
+          for i in $(seq 1 18); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              --max-time 5 https://zoneforty5.tech/api/health || echo "000")
+            echo "Attempt $i/18 — HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Health check failed after 3 minutes"
+          exit 1

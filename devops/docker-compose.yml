@@ -40,10 +40,10 @@ services:
     # Port 5432 is NOT exposed to the host — API connects via Docker network only
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 5
-      start_period: 10s
+      retries: 10
+      start_period: 30s  # first boot initialises the data directory — needs extra time
 
   # ── Redis 7 (AOF persistence) ──────────────────────────────────────────────
   redis:
@@ -59,10 +59,10 @@ services:
     # Port 6379 is NOT exposed to the host — API connects via Docker network only
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
+      interval: 5s
       timeout: 3s
-      retries: 5
-      start_period: 5s
+      retries: 10
+      start_period: 10s
 
   # ── Express API (Node 20) ──────────────────────────────────────────────────
   api:
@@ -103,10 +103,10 @@ services:
     # Port 8080 is NOT exposed to the host — Nginx proxies to it via Docker network
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:${PORT:-8080}/api/health || exit 1"]
-      interval: 30s
+      interval: 10s
       timeout: 5s
-      retries: 3
-      start_period: 20s
+      retries: 10
+      start_period: 30s
 
   # ── Nginx + pre-built frontend (multi-stage) ───────────────────────────────
   nginx:
