@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { readFileSync, writeFileSync, readdirSync } from 'fs'
 
 export default defineConfig({
   plugins: [react()],
@@ -56,6 +57,41 @@ export default defineConfig({
         return [...staticRoutes, ...portfolioPaths, ...postPaths]
       } catch {
         return staticRoutes
+      }
+    },
+    onFinished: (dir) => {
+      // vite-react-ssg injects window.__VITE_REACT_SSG_HASH__ as an inline <script>.
+      // The production CSP (script-src 'self') blocks inline scripts, so the global
+      // is never set, the client requests manifest-undefined.json, and every page
+      // crashes with a JSON parse error. Fix: move the assignment into a same-origin
+      // .js file that CSP 'self' allows, then rewrite every SSG HTML page to load it.
+      const outDir = path.resolve(String(dir))
+      let indexHtml: string
+      try {
+        indexHtml = readFileSync(path.join(outDir, 'index.html'), 'utf-8')
+      } catch {
+        return
+      }
+      const match = indexHtml.match(
+        /<script>window\.__VITE_REACT_SSG_HASH__ = '([^']+)'<\/script>/,
+      )
+      const hash = match?.[1]
+      if (!hash) return
+
+      const hashFile = `ssg-init-${hash}.js`
+      writeFileSync(
+        path.join(outDir, 'assets', hashFile),
+        `window.__VITE_REACT_SSG_HASH__='${hash}'`,
+      )
+
+      const inlineScript = `<script>window.__VITE_REACT_SSG_HASH__ = '${hash}'</script>`
+      const externalScript = `<script src="/assets/${hashFile}"></script>`
+      for (const file of readdirSync(outDir).filter((f) => (f as string).endsWith('.html'))) {
+        const filePath = path.join(outDir, String(file))
+        const html = readFileSync(filePath, 'utf-8')
+        if (html.includes(inlineScript)) {
+          writeFileSync(filePath, html.replace(inlineScript, externalScript))
+        }
       }
     },
   },
