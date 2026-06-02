@@ -73,8 +73,28 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] PR raised: #16 — https://github.com/janak-dev2002/zone45-web/pull/16
       Branch: frontend/fix-hydration-forms → main
 
+## [BACKEND] — Bug Fix Complete (BUG-005)
+- [x] Read EC2 API container logs for failed POST requests (cannot SSH; investigated via code — asked
+      founder to share logs for Turnstile confirmation; see findings doc).
+- [x] Investigate /api/contact endpoint: Turnstile backend logic is correct. Suspected frontend
+      `'dev-token'` fallback. TURNSTILE_SECRET must be confirmed on EC2 (see findings).
+- [x] Investigate /admin/portfolio CRUD endpoints: JWT cookie is sent correctly (credentials:include
+      confirmed in api.ts). SameSite=strict is fine for same-origin. Root cause found: Zod urlSchema.
+- [x] Check Zod validation: CONFIRMED ROOT CAUSE — urlSchema rejects empty string ''; frontend sends
+      projectUrl:'' and coverImageUrl:'' for unfilled optional URL fields → 422 on every create/update.
+- [x] Report findings: shared/agent-handoffs/backend-bug005-findings.md
+- [x] PR raised: #17 — backend/fix-form-submissions → main
+      Fix: z.preprocess empty→undefined in urlSchema (schemas.ts). 3 new tests added. 54/54 pass.
+
+## [FRONTEND] — Bug Investigation Required (BUG-005)
+- [ ] Check fetch/axios calls in src/lib/api.ts for /contact and /admin/portfolio endpoints:
+      Confirm Content-Type: application/json header is set.
+      Confirm credentials: 'include' is set on all authenticated CRUD requests.
+      Confirm Turnstile token is freshly obtained immediately before the contact form POST.
+- [ ] Raise PR on branch: frontend/fix-form-submissions (only if a frontend fix is needed)
+
 ## BLOCKED
-- (none)
+- QA Round 3 — waiting on BUG-005 fix from Backend and/or Frontend Agent
 
 ## COMPLETED
 - [x] Produce system architecture (owner: ARCHITECTURE)
