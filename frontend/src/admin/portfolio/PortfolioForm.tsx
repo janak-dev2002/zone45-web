@@ -82,7 +82,7 @@ export default function PortfolioForm() {
 
   function set(k: keyof PortfolioBody) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const val = 'checked' in e.target ? e.target.checked : e.target.type === 'number' ? Number(e.target.value) : e.target.value
+      const val = e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.type === 'number' ? Number(e.target.value) : e.target.value
       setForm(prev => ({ ...prev, [k]: val }))
     }
   }
