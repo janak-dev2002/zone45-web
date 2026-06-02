@@ -87,6 +87,7 @@ export default function AdminLogin() {
                 <div style={{ position: 'relative' }}>
                   <input
                     id="email"
+                    name="email"
                     className="field"
                     type="email"
                     placeholder="admin@zoneforty5.tech"
@@ -109,6 +110,7 @@ export default function AdminLogin() {
                 <div style={{ position: 'relative' }}>
                   <input
                     id="password"
+                    name="password"
                     className="field"
                     type={showPw ? 'text' : 'password'}
                     placeholder="••••••••••••"
