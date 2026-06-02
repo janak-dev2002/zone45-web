@@ -1,0 +1,69 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - link "ZoneForty5" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]:
+          - img [ref=e7]
+          - generic [ref=e9]: ZoneForty5
+      - generic [ref=e10]:
+        - link "Work" [ref=e11] [cursor=pointer]:
+          - /url: /work
+        - link "Notes" [ref=e12] [cursor=pointer]:
+          - /url: /notes
+        - link "About" [ref=e13] [cursor=pointer]:
+          - /url: /about
+        - link "Contact" [ref=e14] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=e15]:
+        - generic [ref=e16]: Booking Q3 2026
+        - link "Start a project →" [ref=e17] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e18]:
+    - generic [ref=e20]:
+      - generic [ref=e21]: "404"
+      - heading "Page not found." [level=1] [ref=e22]
+      - paragraph [ref=e23]: This path doesn't exist. It wasn't archived — it just never was.
+      - generic [ref=e24]:
+        - link "Back home →" [ref=e25] [cursor=pointer]:
+          - /url: /
+        - link "See the work" [ref=e26] [cursor=pointer]:
+          - /url: /work
+  - contentinfo [ref=e27]:
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - img [ref=e32]
+            - generic [ref=e34]: ZoneForty5
+          - paragraph [ref=e35]: A one-person engineering studio. Full-stack web, IoT, and mobile systems shipped to production.
+          - generic [ref=e37]: Booking Q3 2026
+        - generic [ref=e38]:
+          - generic [ref=e39]: Studio
+          - link "About" [ref=e40] [cursor=pointer]:
+            - /url: /about
+          - link "Selected work" [ref=e41] [cursor=pointer]:
+            - /url: /work
+          - link "Contact" [ref=e42] [cursor=pointer]:
+            - /url: /contact
+          - link "Notes & case studies" [ref=e43] [cursor=pointer]:
+            - /url: /notes
+        - generic [ref=e44]:
+          - generic [ref=e45]: Practice
+          - link "Full-stack web" [ref=e46] [cursor=pointer]:
+            - /url: /work
+          - link "IoT & embedded" [ref=e47] [cursor=pointer]:
+            - /url: /work
+          - link "Mobile (iOS / Android)" [ref=e48] [cursor=pointer]:
+            - /url: /work
+          - link "Agent-assisted delivery" [ref=e49] [cursor=pointer]:
+            - /url: /about
+        - generic [ref=e50]:
+          - generic [ref=e51]: Contact
+          - link "hi@zoneforty5.tech" [ref=e52] [cursor=pointer]:
+            - /url: mailto:hi@zoneforty5.tech
+          - link "GitHub · /janak-dev2002" [ref=e53] [cursor=pointer]:
+            - /url: https://github.com/janak-dev2002
+      - generic [ref=e54]:
+        - generic [ref=e55]: © 2022–2026 ZoneForty5 · Built & hosted by hand
+        - generic [ref=e56]: zoneforty5.tech

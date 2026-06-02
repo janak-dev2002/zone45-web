@@ -161,4 +161,116 @@ All 23 endpoints from `shared/api-contracts.md` are wired in `src/lib/api.ts`.
 
 ---
 
+---
+
+## Bug Fix Round 2 — BUG-001 (2026-06-02)
+
+### Problem
+
+QA smoke test on 2026-06-02 found every page crashing with:
+
+```
+SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+```
+
+The app was requesting `static-loader-data-manifest-undefined.json`.
+
+### Root Cause
+
+`vite-react-ssg` injects `window.__VITE_REACT_SSG_HASH__` as an inline `<script>` tag into every
+SSG-rendered HTML page after rendering completes:
+
+```html
+<script>window.__VITE_REACT_SSG_HASH__ = 'hsthr79ir4'</script>
+```
+
+The production Nginx CSP header (`script-src 'self' https://challenges.cloudflare.com`) blocks all
+inline scripts — no `'unsafe-inline'`. The browser silently refuses to execute this tag, leaving
+`window.__VITE_REACT_SSG_HASH__` as `undefined`. The vite-react-ssg client runtime then constructs:
+
+```
+static-loader-data-manifest-undefined.json
+```
+
+Nginx has no such file, falls back to `index.html` (SPA fallback), the JS tries to parse that HTML
+response as JSON, and React crashes on every page.
+
+### Fix
+
+Added `ssgOptions.onFinished` hook in [frontend/vite.config.ts](../../frontend/vite.config.ts).
+
+After all SSG pages are rendered the hook:
+1. Reads `dist/index.html` and extracts the hash via regex
+2. Writes `dist/assets/ssg-init-{hash}.js` — content: `window.__VITE_REACT_SSG_HASH__='{hash}'`
+3. Rewrites all SSG HTML pages to replace the blocked inline script with
+   `<script src="/assets/ssg-init-{hash}.js"></script>`
+
+The external file is served as a same-origin script (`'self'` is allowed in the CSP). Its filename
+is content-addressed so it is safe for `Cache-Control: immutable` and won't serve stale hashes
+after redeployment.
+
+### Files Changed
+
+| File | Change |
+|------|--------|
+| `frontend/vite.config.ts` | Added `import { readFileSync, writeFileSync, readdirSync } from 'fs'` and `ssgOptions.onFinished` hook |
+
+### Verification
+
+```
+npm run build
+```
+
+- `dist/assets/ssg-init-{hash}.js` present with correct content
+- All SSG HTML pages patched (`<script src="/assets/ssg-init-{hash}.js">`)
+- `dist/static-loader-data-manifest-{hash}.json` correctly named (no `undefined`)
+
+### PR
+
+[#15 — fix: BUG-001 replace SSG inline hash script with CSP-safe external file](https://github.com/janak-dev2002/zone45-web/pull/15)
+
+---
+
+## Follow-up Round 3 — FIX-005 / FIX-006 (2026-06-02)
+
+### FIX-005 — React Hydration Mismatches (#418, #423, #425)
+
+**Root cause:** `src/lib/hooks/useMediaQuery.ts` initialised `useState` with a lazy function
+that reads `window.matchMedia(query).matches` directly on the first browser render. During SSG
+(Node.js), `window` is undefined, so the initial state was always `false` → `<Nav />` rendered.
+In the browser, the same lazy initializer ran on the hydration pass, returning `true` for any
+mobile viewport. React then tried to reconcile `<MNav />` against the SSG HTML's `<Nav />` →
+hydration errors #418 (text mismatch), #423 (root switch to CSR), #425 (text diff).
+
+**Fix:** One-line change in `useMediaQuery.ts` — replace the lazy initializer with the plain
+literal `false`. The `useEffect` that was already present immediately reads the real media query
+and calls `setMatches` after hydration, so the correct nav renders on the second paint with
+no console errors.
+
+### FIX-006 — Missing `name` Attributes on Form Inputs
+
+Added `name=` attributes to all `<input>`, `<select>`, and `<textarea>` elements in:
+
+| Form | Field | Attribute |
+|------|-------|-----------|
+| Contact (`src/pages/Contact.tsx`) | Name | `name="name"` |
+| Contact | Email | `name="email"` |
+| Contact | Subject | `name="subject"` |
+| Contact | Message | `name="message"` |
+| Contact | GDPR checkbox | `name="gdpr"` |
+| Admin Login (`src/admin/Login.tsx`) | Email | `name="email"` |
+| Admin Login | Password | `name="password"` |
+
+### Files Changed
+
+| File | Change |
+|------|--------|
+| `frontend/src/lib/hooks/useMediaQuery.ts` | `useState(false)` instead of lazy initializer |
+| `frontend/src/pages/Contact.tsx` | `name=` on 5 form controls |
+| `frontend/src/admin/Login.tsx` | `name=` on 2 inputs |
+
+### PR
+
+[#16 — fix: FIX-005/FIX-006 — hydration mismatches + form name attributes](https://github.com/janak-dev2002/zone45-web/pull/16)
+
 *End of frontend-done handoff. Frontend Agent session complete.*

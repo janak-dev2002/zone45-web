@@ -198,4 +198,54 @@ docker compose -f devops/docker-compose.yml -f devops/docker-compose.dev.yml up 
 
 ---
 
+---
+
+## Bug Fix Round 2 — BUG-001 / BUG-003 (2026-06-02)
+
+> Branch: `devops/fix-nginx-json-csp` | PR: #14 | Commit: `4cd7be5`
+
+### BUG-001 — SPA fallback serving index.html for missing .json files
+
+**Problem:** `try_files $uri $uri/ /index.html` in the SPA catch-all matched ALL
+missing files including `.json` paths. A missing JSON file returned a 200 with
+HTML content, silently breaking the JS parser on any fetch that expected JSON.
+
+**Fix:** Added a `location ~* \.json$` block immediately before the SPA catch-all:
+
+```nginx
+location ~* \.json$ {
+    try_files $uri =404;
+}
+```
+
+Nginx evaluates location blocks by specificity — this regex block matches before
+the generic `/` catch-all, so missing `.json` paths now correctly return 404.
+
+### BUG-003 — CSP violations (font-src data: + script-src unsafe-inline)
+
+**Problem:** Two browser console CSP violations:
+1. `font-src 'self'` blocked data: URI fonts (woff2 loaded as data URIs)
+2. `script-src` blocked Cloudflare Turnstile inline event handler injection
+
+**Fix:** Updated the `Content-Security-Policy` add_header value:
+- `font-src`: added `data:` source
+- `script-src`: added `'unsafe-inline'`
+
+**Trade-off (documented in config comment):** `'unsafe-inline'` weakens XSS
+protection. Accepted here because: (a) Turnstile execution is sandboxed inside
+a Cloudflare iframe, (b) the script origin is still locked to
+`https://challenges.cloudflare.com`, and (c) a hash/nonce approach is not viable
+without SSR — the static SSG build has no mechanism to inject per-request nonces.
+
+### Post-fix action required
+
+After PR #14 merges to `main`:
+1. CI pipeline builds and deploys automatically
+2. QA Agent to re-run full smoke test suite (currently BLOCKED on this PR)
+3. Verify: missing `.json` path → 404; no CSP console errors on zoneforty5.tech
+
+*End of Bug Fix Round 2 section.*
+
+---
+
 *End of devops-done handoff. DevOps Agent session complete.*

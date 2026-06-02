@@ -1,5 +1,5 @@
 # ZoneForty5 — Tasks
-> Last updated: 2026-05-28
+> Last updated: 2026-06-02
 
 ## Sprint Goal
 Deliver the fully functional ZoneForty5 agency website MVP, complete with public SSG pages, secure admin panel, and robust deployment pipeline, by June 1, 2026.
@@ -39,16 +39,46 @@ Deliver the fully functional ZoneForty5 agency website MVP, complete with public
 - [x] Write Nginx config and multi-stage `nginx.Dockerfile`. (devops/nginx.Dockerfile, devops/nginx/nginx.conf, devops/nginx/conf.d/default.conf)
 - [x] Setup root `docker-compose.yml`. (devops/docker-compose.yml + devops/docker-compose.dev.yml)
 - [x] Build CI/CD pipelines (GitHub Actions). (.github/workflows/ci.yml + deploy.yml)
-- [ ] Provision EC2 `t3.small` and run initial deploy (blocked by: functional codebase — Backend + Frontend agents must deliver first)
+- [x] Provision EC2 `t3.small` and run initial deploy. (Deploy run #10 — Success 2026-06-02. All 5 containers healthy: postgres, redis, api, nginx, certbot.)
 
-## [QA] — Pending
-- [ ] Write E2E Playwright smoke tests (blocked by: deployed application)
+## [QA] — Completed (Round 2)
+- [x] E2E smoke test pass against production — 2026-06-02
+- [x] Re-run full suite after BUG-001 fix — Verified resolved 2026-06-02
+
+## [FRONTEND] — Bug Fix Complete
+- [x] BUG-001: Fix SSG build — `static-loader-data-manifest-undefined.json` has `undefined` in filename.
+      Root cause: production CSP (script-src 'self') blocks the vite-react-ssg inline <script> that
+      sets window.__VITE_REACT_SSG_HASH__. Added ssgOptions.onFinished hook in vite.config.ts that
+      moves the assignment into dist/assets/ssg-init-{hash}.js — a same-origin file CSP 'self' allows.
+- [x] PR raised: #15 — https://github.com/janak-dev2002/zone45-web/pull/15
+      Branch: frontend/fix-ssg-manifest → main
+
+## [DEVOPS] — Bug Fix Required
+- [x] BUG-001 (Nginx): Add `.json` 404 exception in `default.conf` — `try_files` must NOT fall back to `index.html` for `.json` requests.
+      Add: `location ~* \.json$ { try_files $uri =404; }` before the SPA catch-all.
+- [x] BUG-003 (CSP): Update `Content-Security-Policy` header in `default.conf`:
+      - Add `data:` to `font-src` (self-hosted woff2 fonts load via data URIs)
+      - Evaluate if Turnstile needs `unsafe-inline` in `script-src`; if yes, add with nonce or hash approach
+      - Decision: added `'unsafe-inline'` (nonce not viable with static SSG); trade-off documented in config comment
+- [x] Raise PR on branch `devops/fix-nginx-json-csp` — PR #14: https://github.com/janak-dev2002/zone45-web/pull/14
+- [x] After both PRs merged, confirm deploy pipeline green and smoke-test `/` — Verified resolved 2026-06-02
+
+## [FRONTEND] — Minor Follow-up Complete
+- [x] FIX-005: Resolve React hydration mismatches (errors #418, #423, #425).
+      Root cause: useMediaQuery initialised useState from window.matchMedia() on the first browser
+      render. On mobile this produced true (<MNav/>), while SSG always produced false (<Nav/>).
+      Fix: useState(false) always; useEffect updates after hydration. No more console errors.
+- [x] FIX-006: Add `name` attribute to all contact form and admin login form inputs.
+      Contact: name/email/subject/message/gdpr. Login: email/password.
+- [x] PR raised: #16 — https://github.com/janak-dev2002/zone45-web/pull/16
+      Branch: frontend/fix-hydration-forms → main
 
 ## BLOCKED
-- Frontend integration (waiting for frontend scaffold — backend API is ready)
-- Deployment (waiting for Frontend Agent)
+- (none)
 
 ## COMPLETED
 - [x] Produce system architecture (owner: ARCHITECTURE)
-- [x] All DevOps infrastructure files (owner: DEVOPS) — PR #2 open, awaiting merge
-- [x] All Backend API (owner: BACKEND) — PR raised
+- [x] Database schema + migrations (owner: DATABASE)
+- [x] Full backend API — 23 endpoints (owner: BACKEND)
+- [x] Frontend — SSG public site + admin panel (owner: FRONTEND)
+- [x] Full DevOps infrastructure + EC2 deploy (owner: DEVOPS) — deploy pipeline green 2026-06-02

@@ -1,0 +1,288 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - link "ZoneForty5" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]:
+          - img [ref=e7]
+          - generic [ref=e9]: ZoneForty5
+      - generic [ref=e10]:
+        - link "Work" [ref=e11] [cursor=pointer]:
+          - /url: /work
+        - link "Notes" [ref=e12] [cursor=pointer]:
+          - /url: /notes
+        - link "About" [ref=e13] [cursor=pointer]:
+          - /url: /about
+        - link "Contact" [ref=e14] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=e15]:
+        - generic [ref=e16]: Booking Q3 2026
+        - link "Start a project →" [ref=e17] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e18]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]: A solo tech studio · since 2022
+        - heading "Full-stack web, IoT, mobile. One studio, built to ship." [level=1] [ref=e24]
+        - paragraph [ref=e25]: ZoneForty5 is a one-person engineering practice. We work with founders and product teams who need a real system on the other side of a deadline — not a deck, not a workshop, a system.
+        - generic [ref=e26]:
+          - link "Start a project →" [ref=e27] [cursor=pointer]:
+            - /url: /contact
+          - link "See the work" [ref=e28] [cursor=pointer]:
+            - /url: /work
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e35]: ~/zoneforty5/intake
+          - generic [ref=e36]: main
+        - generic [ref=e37]:
+          - generic [ref=e38]: $ cat intake.md
+          - generic [ref=e39]: → scope, stack, timeline, fixed-fee quote in < 48h
+          - generic [ref=e40]: $ git log --oneline --since=2022-01
+          - generic [ref=e41]: a1f3d2e (HEAD → main) Shipped Northbridge fleet v2
+          - generic [ref=e42]: 9b07c11 Stockwell iPad app to TestFlight
+          - generic [ref=e43]: 4e2af80 Faulkner billing portal cutover
+          - generic [ref=e44]: ... 11 more
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - generic [ref=e47]: "14"
+          - generic [ref=e48]: Production systems
+        - generic [ref=e49]:
+          - generic [ref=e50]: 100%
+          - generic [ref=e51]: Still in production
+        - generic [ref=e52]:
+          - generic [ref=e53]: 6w
+          - generic [ref=e54]: Median PRD → prod
+        - generic [ref=e55]:
+          - generic [ref=e56]: "1"
+          - generic [ref=e57]: Person, full stack
+    - generic [ref=e61]:
+      - generic [ref=e62]:
+        - generic [ref=e63]: What we build
+        - heading "Three practices. One person. No agency tax." [level=2] [ref=e64]
+        - paragraph [ref=e65]: Each practice has a portfolio behind it. The same engineer takes the call, writes the spec, ships the system, and answers the pager at 3am.
+      - generic [ref=e66]:
+        - article [ref=e67]:
+          - generic [ref=e68]:
+            - img [ref=e70]
+            - generic [ref=e74]: "01"
+          - heading "Full-stack web" [level=3] [ref=e75]
+          - paragraph [ref=e76]: TypeScript front to back. Next.js, Postgres, edge caching, Stripe, auth. Real production hosting, not Vercel-by-default.
+          - list [ref=e77]:
+            - listitem [ref=e78]:
+              - generic [ref=e79]: →
+              - generic [ref=e80]: Next.js / Remix / SvelteKit
+            - listitem [ref=e81]:
+              - generic [ref=e82]: →
+              - generic [ref=e83]: Postgres + Drizzle / Prisma
+            - listitem [ref=e84]:
+              - generic [ref=e85]: →
+              - generic [ref=e86]: Stripe billing & subscriptions
+        - article [ref=e87]:
+          - generic [ref=e88]:
+            - img [ref=e90]
+            - generic [ref=e94]: "02"
+          - heading "IoT & embedded" [level=3] [ref=e95]
+          - paragraph [ref=e96]: Microcontroller firmware, telemetry pipelines, and the dashboards on top. ESP32, RP2040, Pi, MQTT, InfluxDB, Grafana.
+          - list [ref=e97]:
+            - listitem [ref=e98]:
+              - generic [ref=e99]: →
+              - generic [ref=e100]: ESP32 / RP2040 firmware
+            - listitem [ref=e101]:
+              - generic [ref=e102]: →
+              - generic [ref=e103]: MQTT + InfluxDB pipelines
+            - listitem [ref=e104]:
+              - generic [ref=e105]: →
+              - generic [ref=e106]: Fleet dashboards & OTA
+        - article [ref=e107]:
+          - generic [ref=e108]:
+            - img [ref=e110]
+            - generic [ref=e112]: "03"
+          - heading "Mobile (iOS / Android)" [level=3] [ref=e113]
+          - paragraph [ref=e114]: React Native and native Swift for things RN can't reach. App Store / Play Store review experience, MDM deployment.
+          - list [ref=e115]:
+            - listitem [ref=e116]:
+              - generic [ref=e117]: →
+              - generic [ref=e118]: React Native + Expo EAS
+            - listitem [ref=e119]:
+              - generic [ref=e120]: →
+              - generic [ref=e121]: Native Swift modules
+            - listitem [ref=e122]:
+              - generic [ref=e123]: →
+              - generic [ref=e124]: TestFlight & MDM rollout
+    - generic [ref=e128]:
+      - generic [ref=e129]:
+        - generic [ref=e130]: The stack
+        - heading "Picked because it ships. Not because it's new." [level=2] [ref=e131]
+        - paragraph [ref=e132]: Boring technology, kept boring. Every choice below has at least one production system behind it, running today.
+      - generic [ref=e133]:
+        - generic [ref=e134]:
+          - generic [ref=e135]:
+            - generic [ref=e136]: Frontend
+            - generic [ref=e137]: 01 / 04
+          - generic [ref=e138]:
+            - generic [ref=e139]:
+              - generic [ref=e141]: TypeScript
+              - generic [ref=e142]: lang
+            - generic [ref=e143]:
+              - generic [ref=e145]: React
+              - generic [ref=e146]: ui
+            - generic [ref=e147]:
+              - generic [ref=e149]: Next.js
+              - generic [ref=e150]: framework
+            - generic [ref=e151]:
+              - generic [ref=e153]: Remix
+              - generic [ref=e154]: framework
+            - generic [ref=e155]:
+              - generic [ref=e157]: Tailwind
+              - generic [ref=e158]: css
+            - generic [ref=e159]:
+              - generic [ref=e161]: TanStack
+              - generic [ref=e162]: data
+        - generic [ref=e163]:
+          - generic [ref=e164]:
+            - generic [ref=e165]: Backend
+            - generic [ref=e166]: 02 / 04
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - generic [ref=e170]: Node.js
+              - generic [ref=e171]: runtime
+            - generic [ref=e172]:
+              - generic [ref=e174]: Postgres
+              - generic [ref=e175]: db
+            - generic [ref=e176]:
+              - generic [ref=e178]: Drizzle
+              - generic [ref=e179]: orm
+            - generic [ref=e180]:
+              - generic [ref=e182]: Redis
+              - generic [ref=e183]: cache
+            - generic [ref=e184]:
+              - generic [ref=e186]: tRPC
+              - generic [ref=e187]: api
+            - generic [ref=e188]:
+              - generic [ref=e190]: Stripe
+              - generic [ref=e191]: billing
+        - generic [ref=e192]:
+          - generic [ref=e193]:
+            - generic [ref=e194]: Infra
+            - generic [ref=e195]: 03 / 04
+          - generic [ref=e196]:
+            - generic [ref=e197]:
+              - generic [ref=e199]: Fly.io
+              - generic [ref=e200]: host
+            - generic [ref=e201]:
+              - generic [ref=e203]: Cloudflare
+              - generic [ref=e204]: edge
+            - generic [ref=e205]:
+              - generic [ref=e207]: Docker
+              - generic [ref=e208]: containers
+            - generic [ref=e209]:
+              - generic [ref=e211]: Terraform
+              - generic [ref=e212]: iac
+            - generic [ref=e213]:
+              - generic [ref=e215]: Grafana
+              - generic [ref=e216]: obs
+            - generic [ref=e217]:
+              - generic [ref=e219]: GitHub Actions
+              - generic [ref=e220]: ci
+        - generic [ref=e221]:
+          - generic [ref=e222]:
+            - generic [ref=e223]: Hardware & mobile
+            - generic [ref=e224]: 04 / 04
+          - generic [ref=e225]:
+            - generic [ref=e226]:
+              - generic [ref=e228]: ESP32
+              - generic [ref=e229]: mcu
+            - generic [ref=e230]:
+              - generic [ref=e232]: RP2040
+              - generic [ref=e233]: mcu
+            - generic [ref=e234]:
+              - generic [ref=e236]: MQTT
+              - generic [ref=e237]: protocol
+            - generic [ref=e238]:
+              - generic [ref=e240]: InfluxDB
+              - generic [ref=e241]: tsdb
+            - generic [ref=e242]:
+              - generic [ref=e244]: React Native
+              - generic [ref=e245]: mobile
+            - generic [ref=e246]:
+              - generic [ref=e248]: Swift
+              - generic [ref=e249]: ios
+    - generic [ref=e253]:
+      - generic [ref=e254]:
+        - generic [ref=e255]: Why ZoneForty5
+        - heading "Four reasons. Each one is a contract clause." [level=2] [ref=e256]
+      - generic [ref=e257]:
+        - generic [ref=e258]:
+          - generic [ref=e259]: "01"
+          - generic [ref=e260]:
+            - heading "One throat to choke. Then unchoke." [level=3] [ref=e261]
+            - paragraph [ref=e262]: No account manager between you and the code. The person who writes the contract is the person who pushes to main. Pager rotates back to the same person.
+          - generic [ref=e264]: "#ownership"
+        - generic [ref=e265]:
+          - generic [ref=e266]: "02"
+          - generic [ref=e267]:
+            - heading "Fixed scope, fixed price, weekly demos." [level=3] [ref=e268]
+            - paragraph [ref=e269]: Quote inside 48h of intake. Demo every Friday. Anything outside scope becomes its own line item with its own quote. No surprises on the invoice.
+          - generic [ref=e271]: "#billing"
+        - generic [ref=e272]:
+          - generic [ref=e273]: "03"
+          - generic [ref=e274]:
+            - heading "Agent-assisted, human-shipped." [level=3] [ref=e275]
+            - paragraph [ref=e276]: A team of LLM agents (codegen, review, ops) handles toil and parallelism. A human reviews every line that ships. You hire a person, not a model.
+          - generic [ref=e278]: "#workflow"
+        - generic [ref=e279]:
+          - generic [ref=e280]: "04"
+          - generic [ref=e281]:
+            - heading "You own everything on day one." [level=3] [ref=e282]
+            - paragraph [ref=e283]: Source, infra, domain, secrets — handed over in escrow before kickoff, transferred on completion. We can't hold your business hostage and we won't.
+          - generic [ref=e285]: "#handover"
+    - generic [ref=e287]:
+      - generic [ref=e288]:
+        - generic [ref=e289]: Next slot
+        - heading "Booking 1 project for Q3 2026. Intake closes August 14." [level=3] [ref=e290]
+      - generic [ref=e291]:
+        - link "Start a project →" [ref=e292] [cursor=pointer]:
+          - /url: /contact
+        - link "hi@zoneforty5.tech" [ref=e293] [cursor=pointer]:
+          - /url: mailto:hi@zoneforty5.tech
+  - contentinfo [ref=e294]:
+    - generic [ref=e295]:
+      - generic [ref=e296]:
+        - generic [ref=e297]:
+          - generic [ref=e298]:
+            - img [ref=e299]
+            - generic [ref=e301]: ZoneForty5
+          - paragraph [ref=e302]: A one-person engineering studio. Full-stack web, IoT, and mobile systems shipped to production.
+          - generic [ref=e304]: Booking Q3 2026
+        - generic [ref=e305]:
+          - generic [ref=e306]: Studio
+          - link "About" [ref=e307] [cursor=pointer]:
+            - /url: /about
+          - link "Selected work" [ref=e308] [cursor=pointer]:
+            - /url: /work
+          - link "Contact" [ref=e309] [cursor=pointer]:
+            - /url: /contact
+          - link "Notes & case studies" [ref=e310] [cursor=pointer]:
+            - /url: /notes
+        - generic [ref=e311]:
+          - generic [ref=e312]: Practice
+          - link "Full-stack web" [ref=e313] [cursor=pointer]:
+            - /url: /work
+          - link "IoT & embedded" [ref=e314] [cursor=pointer]:
+            - /url: /work
+          - link "Mobile (iOS / Android)" [ref=e315] [cursor=pointer]:
+            - /url: /work
+          - link "Agent-assisted delivery" [ref=e316] [cursor=pointer]:
+            - /url: /about
+        - generic [ref=e317]:
+          - generic [ref=e318]: Contact
+          - link "hi@zoneforty5.tech" [ref=e319] [cursor=pointer]:
+            - /url: mailto:hi@zoneforty5.tech
+          - link "GitHub · /janak-dev2002" [ref=e320] [cursor=pointer]:
+            - /url: https://github.com/janak-dev2002
+      - generic [ref=e321]:
+        - generic [ref=e322]: © 2022–2026 ZoneForty5 · Built & hosted by hand
+        - generic [ref=e323]: zoneforty5.tech
+  - heading "Unexpected Application Error!" [level=2] [ref=e324]
+  - heading "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON" [level=3] [ref=e325]
+  - generic [ref=e326]: "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
