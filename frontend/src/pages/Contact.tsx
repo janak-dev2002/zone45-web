@@ -145,18 +145,18 @@ export default function Contact() {
                     <div className="form-grid">
                       <div className="form-row">
                         <label className="field-label" htmlFor="name">Name</label>
-                        <input id="name" className="field" placeholder="Your name" value={form.name} onChange={update('name')} required />
+                        <input id="name" name="name" className="field" placeholder="Your name" value={form.name} onChange={update('name')} required />
                       </div>
                       <div className="form-row">
                         <label className="field-label" htmlFor="email">Email</label>
-                        <input id="email" className="field" type="email" placeholder="you@company.com" value={form.email} onChange={update('email')} required />
+                        <input id="email" name="email" className="field" type="email" placeholder="you@company.com" value={form.email} onChange={update('email')} required />
                       </div>
                     </div>
 
                     <div className="form-row">
                       <label className="field-label" htmlFor="subject">Subject</label>
                       <div style={{ position: 'relative' }}>
-                        <select id="subject" className="field" value={form.subject} onChange={update('subject')} style={{ appearance: 'none', paddingRight: 38 }}>
+                        <select id="subject" name="subject" className="field" value={form.subject} onChange={update('subject')} style={{ appearance: 'none', paddingRight: 38 }}>
                           {SUBJECTS.map(o => <option key={o} value={o}>{o}</option>)}
                         </select>
                         <div style={{ position: 'absolute', right: 12, top: 0, bottom: 0, display: 'flex', alignItems: 'center', pointerEvents: 'none', color: '#8b949e' }}>
@@ -174,6 +174,7 @@ export default function Contact() {
                       </div>
                       <textarea
                         id="message"
+                        name="message"
                         className="field"
                         placeholder="Tell me about the system you want shipped. Include a rough timeline and budget if you have one."
                         value={form.message}
@@ -208,7 +209,7 @@ export default function Contact() {
                     />
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 12, border: '1px dashed rgba(79,93,117,0.4)', borderRadius: 6 }}>
-                      <input type="checkbox" id="gdpr" checked={form.gdpr} onChange={update('gdpr')} style={{ accentColor: '#00d992', width: 16, height: 16, flexShrink: 0 }} />
+                      <input type="checkbox" id="gdpr" name="gdpr" checked={form.gdpr} onChange={update('gdpr')} style={{ accentColor: '#00d992', width: 16, height: 16, flexShrink: 0 }} />
                       <label htmlFor="gdpr" className="small" style={{ color: '#bdbdbd', lineHeight: '20px' }}>
                         I understand my message is read by the studio only and deleted within 30 days if we don't engage.
                       </label>

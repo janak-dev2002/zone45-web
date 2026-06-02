@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return window.matchMedia(query).matches
-  })
+  // Always initialize to false so the SSR HTML and the first browser render match.
+  // useEffect updates to the actual value after hydration, preventing errors #418/#423/#425.
+  const [matches, setMatches] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
