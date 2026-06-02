@@ -47,6 +47,7 @@ jobs:
         with:
           context: ./backend
           file: backend/Dockerfile
+          target: production
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.REPO }}/api:${{ env.IMAGE_TAG }}
@@ -164,26 +165,26 @@ jobs:
             docker compose ps
 
       - name: Smoke-test deployed API
-        # Test the API directly on its internal port via SSH.
-        # Avoids dependency on nginx (TLS bootstrap) and public DNS being set up.
+        # Run health check INSIDE the api container via docker exec.
+        # The API port (8080) is not exposed to the EC2 host — only reachable
+        # from within the Docker bridge network or via docker exec.
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_SSH_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            echo "Waiting for API to be healthy (up to 90s)..."
+            echo "Waiting for API container to be healthy (up to 90s)..."
             for i in $(seq 1 18); do
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-                --max-time 5 http://localhost:8080/api/health 2>/dev/null || echo "000")
-              echo "Attempt $i/18 — HTTP $STATUS"
-              if [ "$STATUS" = "200" ]; then
-                echo "API health check passed"
+              if docker exec zf45-api wget -qO- http://localhost:8080/api/health \
+                   > /dev/null 2>&1; then
+                echo "Attempt $i — API health check passed"
                 exit 0
               fi
+              echo "Attempt $i/18 — not ready yet"
               sleep 5
             done
             echo "API health check failed after 90s"
-            docker compose -f /home/$USER/zone45-web/docker-compose.yml ps
+            docker ps
             docker logs zf45-api --tail=20
             exit 1
